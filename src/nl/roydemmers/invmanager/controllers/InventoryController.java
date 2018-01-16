@@ -37,7 +37,8 @@ import nl.roydemmers.invmanager.service.SupplierService;
 public class InventoryController extends AbstractController {
 
 
-	@RequestMapping("/inventoryitems")
+	// Shows main inventorytable
+	@RequestMapping(value= {"/inventoryitems", "/"})
 	public String showInventoryOverview(Model model) {
 
 		List<InventoryItem> allInventoryItems = inventoryService.getAllInventoryItems();
@@ -48,6 +49,8 @@ public class InventoryController extends AbstractController {
 		return JspPage.INVENTORY_OVERVIEW;
 	}
 
+	// Shows a form to create a new item
+	// Temporarily maps the item to a seperate object, needed to convert price double to a long
 	@RequestMapping("/createinventoryitem")
 	public String createNewInventoryItemForm(Model model) {
 		model.addAttribute("inventoryItemTemp", new InventoryItemDoubleValue());
@@ -55,6 +58,7 @@ public class InventoryController extends AbstractController {
 		return JspPage.NEW_ITEM_FORM;
 	}
 
+	// Logic to add the item created in /createinventoryitem
 	@RequestMapping(value = "/docreate", method = RequestMethod.POST)
 	public String createNewInventoryItemPOST(Model model, @Valid InventoryItemDoubleValue inventoryItemTemp, BindingResult result, HttpServletRequest request) {
 
@@ -150,7 +154,7 @@ public class InventoryController extends AbstractController {
 
 	}
 
-	@RequestMapping(value = { "/statistics", "/" })
+	@RequestMapping(value ="/statistics")
 	public String showInventoryStatistics(Model model) {
 
 		Map<Integer, Long> calculated = financialCalculationService.getSuppliersWithTotalWorth();
