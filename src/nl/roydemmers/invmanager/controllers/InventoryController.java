@@ -74,25 +74,19 @@ public class InventoryController extends AbstractController {
 		return JspPage.EDIT_ITEM_FORM;
 	}
 
+	//Handles the logic for updating an item. Also adds an attachment if the attachment field isn't empty
 	@RequestMapping(value = "/doupdate", method = RequestMethod.POST)
 	public String editItemPOST(Model model, InventoryItemDoubleValue inventoryItemTemp, BindingResult result, @RequestParam CommonsMultipartFile[] fileUpload) {
 
-		System.out.println(fileUpload);
 		if (result.hasErrors()) {
 			return JspPage.EDIT_ITEM_FORM;
 		}
-		
+
+		// Converts the item with a Double price value to an item with a long value, to prevent math errors
+		// Adds the ID, supplier and attachment from the database
+		InventoryItem inventoryItem = inventoryService.convertTempItemToFullObject(inventoryItemTemp, currentItem);
 		
 		String fileNameOnDisk = uploadService.uploadFileReturnFileName(fileUpload, currentItem.getId());
-
-	
-		
-		InventoryItem inventoryItem = inventoryItemTemp.convertPriceToLong();
-		
-		inventoryItem.setId(currentItem.getId());
-		inventoryItem.setSupplier(currentItem.getSupplier());
-		inventoryItem.setAttachment(currentItem.getAttachment());
-		
 		if(fileNameOnDisk != null){inventoryItem.setAttachment(fileNameOnDisk);}
 		
 		inventoryService.updateInventoryItem(inventoryItem);

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import nl.roydemmers.invmanager.dao.InventoryDao;
 import nl.roydemmers.invmanager.dao.InventoryLogItemDao;
 import nl.roydemmers.invmanager.objects.InventoryItem;
+import nl.roydemmers.invmanager.objects.InventoryItemDoubleValue;
 import nl.roydemmers.invmanager.objects.InventoryLogItem;
 
 @Service("inventoryService")
@@ -140,5 +141,15 @@ public class InventoryService extends AbstractService {
 		} else {
 			return new InventoryLogItem();
 		}
+	}
+	
+	public InventoryItem convertTempItemToFullObject(InventoryItemDoubleValue inventoryItemTemp, InventoryItem currentItem) {
+		InventoryItem inventoryItem = inventoryItemTemp.convertPriceToLong();
+		
+		inventoryItem.setId(currentItem.getId());
+		inventoryItem.setSupplier(currentItem.getSupplier());
+		inventoryItem.setAttachment(currentItem.getAttachment());
+		
+		return inventoryItem;
 	}
 }
