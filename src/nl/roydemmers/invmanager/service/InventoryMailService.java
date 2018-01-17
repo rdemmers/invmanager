@@ -69,9 +69,9 @@ public class InventoryMailService extends AbstractService {
 	
 	public void appendAttachment(String attachment, MimeMessageHelper helper) {
 		if(attachment != null) {
-			Resource file = new ClassPathResource("com/paperfoam/inventory/mail/" + attachment);
+			FileSystemResource file = new FileSystemResource(context.getRealPath("/WEB-INF/attachments/")+ "/" + attachment);
 			try {
-				helper.addAttachment("attachment.png", file);
+				helper.addAttachment(file.getFilename(), file);
 			} catch (MessagingException e) {
 				
 				e.printStackTrace();

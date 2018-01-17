@@ -1,18 +1,12 @@
 package nl.roydemmers.invmanager.controllers;
 
 import java.security.Principal;
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,25 +14,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import nl.roydemmers.invmanager.constants.JspPage;
-import nl.roydemmers.invmanager.dao.InventoryLogItemDao;
-import nl.roydemmers.invmanager.dao.SupplierDao;
 import nl.roydemmers.invmanager.objects.InventoryItem;
 import nl.roydemmers.invmanager.objects.InventoryItemDoubleValue;
 import nl.roydemmers.invmanager.objects.InventoryLogItem;
 import nl.roydemmers.invmanager.objects.Supplier;
-import nl.roydemmers.invmanager.service.FinancialCalculationService;
-import nl.roydemmers.invmanager.service.InventoryMailService;
-import nl.roydemmers.invmanager.service.InventoryService;
-import nl.roydemmers.invmanager.service.SupplierService;
 
 @Controller
 public class InventoryController extends AbstractController {
 
-
 	// Shows main inventorytable
-	@RequestMapping(value= {"/inventoryitems", "/"})
+	@RequestMapping(value = { "/inventoryitems", "/" })
 	public String showInventoryOverview(Model model) {
 
 		List<InventoryItem> allInventoryItems = inventoryService.getAllInventoryItems();
@@ -50,7 +38,8 @@ public class InventoryController extends AbstractController {
 	}
 
 	// Shows a form to create a new item
-	// Temporarily maps the item to a seperate object, needed to convert price double to a long
+	// Temporarily maps the item to a seperate object, needed to convert price
+	// double to a long
 	@RequestMapping("/createinventoryitem")
 	public String createNewInventoryItemForm(Model model) {
 		model.addAttribute("inventoryItemTemp", new InventoryItemDoubleValue());
@@ -66,7 +55,7 @@ public class InventoryController extends AbstractController {
 
 			return JspPage.NEW_ITEM_FORM;
 		}
-		
+
 		inventoryItemTemp.setSupplier(supplierService.getSupplier(Integer.parseInt(request.getParameter("supplierId"))));
 
 		InventoryItem inventoryItem = inventoryItemTemp.convertPriceToLong();
@@ -86,16 +75,26 @@ public class InventoryController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/doupdate", method = RequestMethod.POST)
-	public String editItemPOST(Model model, InventoryItemDoubleValue inventoryItemTemp, BindingResult result) {
+	public String editItemPOST(Model model, InventoryItemDoubleValue inventoryItemTemp, BindingResult result, @RequestParam CommonsMultipartFile[] fileUpload) {
 
+		System.out.println(fileUpload);
 		if (result.hasErrors()) {
 			return JspPage.EDIT_ITEM_FORM;
 		}
+		
+		
+		String fileNameOnDisk = uploadService.uploadFileReturnFileName(fileUpload, currentItem.getId());
 
+	
+		
 		InventoryItem inventoryItem = inventoryItemTemp.convertPriceToLong();
-
+		
 		inventoryItem.setId(currentItem.getId());
 		inventoryItem.setSupplier(currentItem.getSupplier());
+		inventoryItem.setAttachment(currentItem.getAttachment());
+		
+		if(fileNameOnDisk != null){inventoryItem.setAttachment(fileNameOnDisk);}
+		
 		inventoryService.updateInventoryItem(inventoryItem);
 		inventoryService.checkStockForMail(inventoryItem.getId());
 
@@ -130,10 +129,10 @@ public class InventoryController extends AbstractController {
 		Principal principal = request.getUserPrincipal();
 		int id = Integer.parseInt(request.getParameter("product_id"));
 		int quantityMutate = Integer.parseInt(request.getParameter("product_mutate"));
-		
+
 		currentItem = inventoryService.getInventoryItem(id);
 		int adjustedStock = currentItem.getCurrentStock() + quantityMutate;
-		
+
 		currentItem.setCurrentStock(adjustedStock);
 
 		inventoryService.updateInventoryItem(currentItem);
@@ -154,7 +153,7 @@ public class InventoryController extends AbstractController {
 
 	}
 
-	@RequestMapping(value ="/statistics")
+	@RequestMapping(value = "/statistics")
 	public String showInventoryStatistics(Model model) {
 
 		Map<Integer, Long> calculated = financialCalculationService.getSuppliersWithTotalWorth();
@@ -166,25 +165,19 @@ public class InventoryController extends AbstractController {
 		model.addAttribute("suppliers", allSuppliers);
 		model.addAttribute("lowitems", lowItems);
 		model.addAttribute("recentchanges", recentChanges);
-		
-		
-		
 
 		return JspPage.INVENTORY_STATISTICS;
 	}
-	
-	@RequestMapping(value="/getnotification", method=RequestMethod.GET, produces="application/json")
+
+	@RequestMapping(value = "/getnotification", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public InventoryLogItem getNotification(){
+	public InventoryLogItem getNotification() {
 		InventoryLogItem logItem = inventoryLogItemDao.getLastLogItem();
 		InventoryItem inventoryItem = inventoryService.getInventoryItem(logItem.getItemID());
 		inventoryService.fillLogItemWithItemProps(logItem, inventoryItem);
-		
+
 		return inventoryService.checkIfObjectChangeIsLessThanXMs(logItem, 10000);
-		
-		
+
 	}
-	
-	
 
 }

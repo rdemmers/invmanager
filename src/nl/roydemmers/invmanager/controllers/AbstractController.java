@@ -1,5 +1,7 @@
 package nl.roydemmers.invmanager.controllers;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import nl.roydemmers.invmanager.dao.InventoryLogItemDao;
@@ -10,6 +12,7 @@ import nl.roydemmers.invmanager.service.InventoryMailService;
 import nl.roydemmers.invmanager.service.InventoryService;
 import nl.roydemmers.invmanager.service.PreferenceService;
 import nl.roydemmers.invmanager.service.SupplierService;
+import nl.roydemmers.invmanager.service.UploadService;
 import nl.roydemmers.invmanager.service.UserService;
 
 public class AbstractController {
@@ -24,6 +27,15 @@ public class AbstractController {
 	protected PreferenceService preferenceService;
 	protected InventoryMailService inventoryMailService;
 	protected AdminService adminService;
+	protected UploadService uploadService;
+	
+	@Autowired
+	public void setUploadService(UploadService uploadService) {
+		this.uploadService = uploadService;
+	}
+	
+	@Autowired
+	protected ServletContext servletContext;
 	
 	@Autowired
 	public void setAdminService(AdminService adminService) {

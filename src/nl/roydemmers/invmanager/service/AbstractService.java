@@ -1,5 +1,7 @@
 package nl.roydemmers.invmanager.service;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +16,8 @@ public abstract class AbstractService {
 	protected UserService userService;
 	protected PreferenceService preferenceService;
 	protected InventoryMailService inventoryMailService;
-	
-	
+	@Autowired
+	protected ServletContext context;
 
 	@Autowired
 	public void setInventoryMailService(InventoryMailService inventoryMailService) {

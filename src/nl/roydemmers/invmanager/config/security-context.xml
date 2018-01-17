@@ -42,6 +42,7 @@
 		<security:intercept-url pattern="/mutateitem" access="isAuthenticated()" />
 		<security:intercept-url pattern="/edititem" access="hasAnyRole('ROLE_ADMIN', 'ROLE_MOD')" />
 		<security:intercept-url pattern="/doupdate" access="hasAnyRole('ROLE_ADMIN', 'ROLE_MOD')" />
+		<security:intercept-url pattern="/upload" access="hasAnyRole('ROLE_ADMIN', 'ROLE_MOD')" />
 		<security:intercept-url pattern="/docreate" access="hasAnyRole('ROLE_ADMIN', 'ROLE_MOD')" />
 		<security:intercept-url pattern="/dodelete" access="hasAnyRole('ROLE_ADMIN', 'ROLE_MOD')" />
 		<security:intercept-url pattern="/createinventoryitem" access="hasAnyRole('ROLE_ADMIN', 'ROLE_MOD')" />
