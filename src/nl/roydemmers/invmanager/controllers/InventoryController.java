@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,10 +18,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import nl.roydemmers.invmanager.constants.JspPage;
+import nl.roydemmers.invmanager.objects.EmailMessage;
 import nl.roydemmers.invmanager.objects.InventoryItem;
 import nl.roydemmers.invmanager.objects.InventoryItemDoubleValue;
 import nl.roydemmers.invmanager.objects.InventoryLogItem;
 import nl.roydemmers.invmanager.objects.Supplier;
+import nl.roydemmers.invmanager.objects.User;
 
 @Controller
 public class InventoryController extends AbstractController {
@@ -163,5 +166,20 @@ public class InventoryController extends AbstractController {
 		return JspPage.INVENTORY_STATISTICS;
 	}
 
+	@RequestMapping("/about")
+	public String showAbout(Model model) {
+		model.addAttribute("emailMessage", new EmailMessage());
+		return "about";
+	}
+	
+	@RequestMapping(value="/submitissue", method= RequestMethod.POST)
+	public String submitIssue(Model model, @Valid EmailMessage emailMessage, BindingResult result, HttpServletRequest request) {
+		Principal principal = request.getUserPrincipal();
+		User user = userService.getUserEmail(principal.getName());
+		inventoryMailService.sendIssueEmail(emailMessage, user);
+		
+		emailMessage.setMailBody("Bericht is verzonden!");
+		return "about";
+	}
 
 }

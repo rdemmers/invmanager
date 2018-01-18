@@ -12,8 +12,10 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import nl.roydemmers.invmanager.config.JavaBeanConfig;
+import nl.roydemmers.invmanager.objects.EmailMessage;
 import nl.roydemmers.invmanager.objects.InventoryItem;
 import nl.roydemmers.invmanager.objects.Supplier;
+import nl.roydemmers.invmanager.objects.User;
 
 
 @Service("inventoryMailService")
@@ -87,5 +89,28 @@ public class InventoryMailService{
 	}
 
 
+	public void sendIssueEmail(EmailMessage emailMessage, User user) {
+		
+		String emailContent = emailMessage.getMailBody();
+		
+		emailContent += "\n\n" + user.getUsername();
+		emailContent += "\n" + user.getEmail();
+		emailContent += "\n" + user.getAuthority();
+		
+		JavaMailSender mailSender = javaBeanConfig.getJavaMailSender(preferenceService);
+		
+		MimeMessage message = mailSender.createMimeMessage();
+		try {
+			MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+			helper.setTo("roydemmers@outlook.com");
+			helper.setSubject("Issue: " + user.getUsername());
+			helper.setText(emailContent);
+			
+			mailSender.send(message);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 }

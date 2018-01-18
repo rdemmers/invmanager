@@ -28,6 +28,8 @@
 		<security:intercept-url pattern="/loggedout" access="permitAll" />
 		<security:intercept-url pattern="/login" access="permitAll" />
 		<security:intercept-url pattern="/static/**" access="permitAll" />
+		<security:intercept-url pattern="/about" access="isAuthenticated()" />
+		<security:intercept-url pattern="/submitissue" access="isAuthenticated()" />
 		
 		<!--  INVENTORY VIEW -->
 		<security:intercept-url pattern="/inventoryitems" access="isAuthenticated()" />
