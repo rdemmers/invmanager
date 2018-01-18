@@ -1,30 +1,34 @@
 package nl.roydemmers.invmanager.service;
 
-import java.io.File;
-import java.util.logging.Logger;
-
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
-import org.springframework.mail.MailParseException;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import nl.roydemmers.invmanager.config.JavaBeanConfig;
 import nl.roydemmers.invmanager.objects.InventoryItem;
 import nl.roydemmers.invmanager.objects.Supplier;
 
-@Service("inventoryMailService")
-public class InventoryMailService extends AbstractService {
 
+@Service("inventoryMailService")
+public class InventoryMailService{
+	@Autowired
+	private JavaBeanConfig javaBeanConfig;
+	@Autowired
+	private FinancialCalculationService financialCalculationService;
+	@Autowired
+	protected PreferenceService preferenceService;
+	@Autowired
+	protected ServletContext context;
+	
+	
+	// Creates and sends a template message with attachment if available
+	// Can be used to quickly send custom emails to suppliers when stock runs low
 	public void sendMessageWithAttachment(String attachment, InventoryItem inventoryItem) {
 
 		Supplier supplier = inventoryItem.getSupplier();

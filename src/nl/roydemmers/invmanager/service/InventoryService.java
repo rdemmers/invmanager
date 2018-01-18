@@ -1,6 +1,5 @@
 package nl.roydemmers.invmanager.service;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,46 +14,33 @@ import nl.roydemmers.invmanager.objects.InventoryItemDoubleValue;
 import nl.roydemmers.invmanager.objects.InventoryLogItem;
 
 @Service("inventoryService")
-public class InventoryService extends AbstractService {
-
+public class InventoryService {
+	@Autowired
 	private InventoryDao inventoryDao;
+	@Autowired
 	private InventoryLogItemDao inventoryLogItemDao;
-
-	public InventoryDao getInventoryDao() {
-		return inventoryDao;
-	}
-
 	@Autowired
-	public void setInventoryDao(InventoryDao inventoryDao) {
-		this.inventoryDao = inventoryDao;
-	}
+	private InventoryMailService inventoryMailService;
 
-	@Autowired
-	public void setInventoryLogItemDao(InventoryLogItemDao inventoryLogItemDao) {
-		this.inventoryLogItemDao = inventoryLogItemDao;
-	}
 
 	public List<InventoryItem> getAllInventoryItems() {
-
 		return inventoryDao.getInventoryList();
-
 	}
 
+	// To display a List with items under the stock minimum
 	public List<InventoryItem> getLowInventoryItems() {
-
 		List<InventoryItem> inventoryList = inventoryDao.getInventoryList();
-		List<InventoryItem> lowList = new ArrayList<InventoryItem>();
+		List<InventoryItem> lowList = new ArrayList<>();
 
 		for (int i = 0; i < inventoryList.size(); i++) {
 			if (inventoryList.get(i).getCurrentStock() <= inventoryList.get(i).getStockMinimum()) {
 				lowList.add(inventoryList.get(i));
 			}
 		}
-
 		return lowList;
-
 	}
 
+	// Display the last x changes in inventory amount
 	public List<InventoryLogItem> getRecentChanges(boolean getAll) {
 
 		List<InventoryLogItem> inventoryLogList = inventoryLogItemDao.getQuantityChangesHistory();
@@ -113,6 +99,8 @@ public class InventoryService extends AbstractService {
 
 	}
 
+	// Since log items aren't stored with all their properties this function appends the object
+	// with values from the database
 	public void fillLogItemWithItemProps(InventoryLogItem logItem, InventoryItem inventoryItem) {
 
 		logItem.setProductName(inventoryItem.getName());
@@ -125,24 +113,8 @@ public class InventoryService extends AbstractService {
 			logItem.setUnderMinimum(false);
 		}
 	}
-
-	// Checks if the last change in the database is less than x ms ago.
-	// Returns a new Object if the creation was too long ago, returns the passed
-	// logItem if it was recent enough
-	// Used to determine the time the "Last changed" notification pops up
-	// TODO add setting to admin dashboard and create an entry for it in the
-	// database.
-	public InventoryLogItem checkIfObjectChangeIsLessThanXMs(InventoryLogItem logItem, long miliSeconds) {
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		long currentTime = timestamp.getTime();
-		long itemTime = logItem.getTimeStamp().getTime();
-		if (currentTime - itemTime < miliSeconds) {
-			return logItem;
-		} else {
-			return new InventoryLogItem();
-		}
-	}
 	
+	// Used to circumvent issues with double values in money and makes it easier to manipulate objects through the front end.
 	public InventoryItem convertTempItemToFullObject(InventoryItemDoubleValue inventoryItemTemp, InventoryItem currentItem) {
 		InventoryItem inventoryItem = inventoryItemTemp.convertPriceToLong();
 		

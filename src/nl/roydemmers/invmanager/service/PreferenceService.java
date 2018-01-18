@@ -9,15 +9,12 @@ import org.springframework.stereotype.Service;
 import nl.roydemmers.invmanager.dao.GlobalPrefDao;
 import nl.roydemmers.invmanager.objects.GlobalPref;
 
+// Service that communicates with the preference DAO 
+
 @Service("globalPrefService")
-public class PreferenceService extends AbstractService {
-
-	private GlobalPrefDao globalPrefDao;
-
+public class PreferenceService {
 	@Autowired
-	public void setGlobalPrefDao(GlobalPrefDao globalPrefDao) {
-		this.globalPrefDao = globalPrefDao;
-	}
+	private GlobalPrefDao globalPrefDao;
 
 	
 	public GlobalPref getPreference(String name) {
@@ -47,9 +44,9 @@ public class PreferenceService extends AbstractService {
 	
 	public void updateAllPreferencesInDb(Map<String, String> preferenceMap) {
 		for(Map.Entry<String, String> entry : preferenceMap.entrySet()){
-			  GlobalPref preference =  preferenceService.getPreference(entry.getKey());
+			  GlobalPref preference =  this.getPreference(entry.getKey());
 			  preference.setValue(entry.getValue());
-			  preferenceService.updateGlobalPreference(preference);  
+			  this.updateGlobalPreference(preference);  
 			}	
 	}
 }

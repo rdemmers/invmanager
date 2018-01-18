@@ -21,15 +21,16 @@ import nl.roydemmers.invmanager.objects.InventoryItem;
 import nl.roydemmers.invmanager.objects.InventoryLogItem;
 
 @Service("uploadService")
-public class UploadService extends AbstractService {
+public class UploadService {
+	
+	@Autowired
+	protected ServletContext context;
 
-	public String uploadFileReturnFileName(CommonsMultipartFile[] uploadFile, int currentItemId) {
+	public String uploadFileReturnFileName(CommonsMultipartFile[] uploadFile) {
 		
 		if (uploadFile != null && uploadFile.length > 0) {
 			
 			for (CommonsMultipartFile aFile : uploadFile) {
-
-				System.out.println("Saving file: " + aFile.getOriginalFilename());
 				try {
 					if (!aFile.getOriginalFilename().equals("")) {
 						aFile.transferTo(new File(context.getRealPath("/WEB-INF/attachments/")+ "/" + aFile.getOriginalFilename()));

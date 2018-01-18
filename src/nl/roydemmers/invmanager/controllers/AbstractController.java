@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import nl.roydemmers.invmanager.dao.InventoryLogItemDao;
 import nl.roydemmers.invmanager.objects.InventoryItem;
-import nl.roydemmers.invmanager.service.AdminService;
 import nl.roydemmers.invmanager.service.FinancialCalculationService;
 import nl.roydemmers.invmanager.service.InventoryMailService;
 import nl.roydemmers.invmanager.service.InventoryService;
@@ -26,7 +25,6 @@ public class AbstractController {
 	protected UserService userService;
 	protected PreferenceService preferenceService;
 	protected InventoryMailService inventoryMailService;
-	protected AdminService adminService;
 	protected UploadService uploadService;
 	
 	@Autowired
@@ -36,11 +34,6 @@ public class AbstractController {
 	
 	@Autowired
 	protected ServletContext servletContext;
-	
-	@Autowired
-	public void setAdminService(AdminService adminService) {
-		this.adminService = adminService;
-	}
 
 	@Autowired
 	public void setInventoryMailService(InventoryMailService inventoryMailService) {

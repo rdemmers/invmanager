@@ -86,7 +86,7 @@ public class InventoryController extends AbstractController {
 		// Adds the ID, supplier and attachment from the database
 		InventoryItem inventoryItem = inventoryService.convertTempItemToFullObject(inventoryItemTemp, currentItem);
 		
-		String fileNameOnDisk = uploadService.uploadFileReturnFileName(fileUpload, currentItem.getId());
+		String fileNameOnDisk = uploadService.uploadFileReturnFileName(fileUpload);
 		if(fileNameOnDisk != null){inventoryItem.setAttachment(fileNameOnDisk);}
 		
 		inventoryService.updateInventoryItem(inventoryItem);
@@ -163,15 +163,5 @@ public class InventoryController extends AbstractController {
 		return JspPage.INVENTORY_STATISTICS;
 	}
 
-	@RequestMapping(value = "/getnotification", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public InventoryLogItem getNotification() {
-		InventoryLogItem logItem = inventoryLogItemDao.getLastLogItem();
-		InventoryItem inventoryItem = inventoryService.getInventoryItem(logItem.getItemID());
-		inventoryService.fillLogItemWithItemProps(logItem, inventoryItem);
-
-		return inventoryService.checkIfObjectChangeIsLessThanXMs(logItem, 10000);
-
-	}
 
 }

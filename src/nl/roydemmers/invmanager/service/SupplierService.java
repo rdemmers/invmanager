@@ -16,7 +16,7 @@ import nl.roydemmers.invmanager.objects.Supplier;
 import nl.roydemmers.invmanager.objects.User;
 
 @Service("supplierService")
-public class SupplierService extends AbstractService{
+public class SupplierService{
 	
 	private SupplierDao supplierDao;	
 
@@ -45,6 +45,7 @@ public class SupplierService extends AbstractService{
 		
 	}
 	
+	// Used to easily access the supplier list front end
 	public List<Supplier> convertSupplierHashmapToObjectList(Map<Integer,Long> map){
 		Iterator<Map.Entry<Integer, Long>> it = map.entrySet().iterator();
 		while(it.hasNext()) {
@@ -53,8 +54,7 @@ public class SupplierService extends AbstractService{
 			this.setSupplierWorth(pair.getKey(), pair.getValue());
 		}
 		
-		List<Supplier> allSuppliers = this.getAllSuppliers();
-		return allSuppliers;
+		return this.getAllSuppliers();
 	}
 	
 	public void update(Supplier supplier) {
