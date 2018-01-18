@@ -178,7 +178,9 @@ public class InventoryController extends AbstractController {
 		User user = userService.getUserEmail(principal.getName());
 		inventoryMailService.createIssueEmail(emailMessage, user);
 		
-		emailMessage.setMailBody("Bericht is verzonden!");
+		// added this so the form displays that the message was actually sent
+		// I had to create a new EmailMessage because the mailsender runs on a seperate thread and the body would be changed before the mail was sent.
+		model.addAttribute("emailMessage", new EmailMessage("Bericht is verzonden!"));
 		return "about";
 	}
 

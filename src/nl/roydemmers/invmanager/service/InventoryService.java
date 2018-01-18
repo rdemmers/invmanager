@@ -26,6 +26,20 @@ public class InventoryService {
 	public List<InventoryItem> getAllInventoryItems() {
 		return inventoryDao.getInventoryList();
 	}
+	
+	public List<InventoryItem> getItemsWithAttachment(){
+		List<InventoryItem> inventoryItems = this.getAllInventoryItems();
+		List<InventoryItem> inventoryAttachments = new ArrayList<>();
+		
+		for(InventoryItem inventoryItem : inventoryItems) {
+			if(inventoryItem.getAttachment().length() > 4) {
+				inventoryAttachments.add(inventoryItem);
+			}
+		}
+		
+		return inventoryAttachments;
+		
+	}
 
 	// To display a List with items under the stock minimum
 	public List<InventoryItem> getLowInventoryItems() {

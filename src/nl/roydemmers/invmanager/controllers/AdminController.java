@@ -151,4 +151,24 @@ public class AdminController extends AbstractController {
 		return "mail";
 	}
 
+	
+	@RequestMapping(value ="/admin/attachment")
+	public String showAttachments(Model model) {
+		List<InventoryItem> itemsWithAttachment = inventoryService.getItemsWithAttachment();
+		System.out.println(itemsWithAttachment.toString());
+		model.addAttribute("attachmentList", itemsWithAttachment);
+		
+		return "attachment";
+	}
+	
+	@RequestMapping(value = "/admin/deleteattachment", method = RequestMethod.POST)
+	public String deleteAttachment(Model model, HttpServletRequest request) {
+
+		InventoryItem inventoryItem = inventoryService.getInventoryItem(Integer.parseInt(request.getParameter("item_id")));
+		inventoryItem.setAttachment("");
+		inventoryService.updateInventoryItem(inventoryItem);
+		
+		return "attachment";
+	}
+	
 }

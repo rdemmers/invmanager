@@ -65,6 +65,8 @@
 		<security:intercept-url pattern="/admin/docreate" access="hasAnyRole('ROLE_ADMIN')" />
 		<security:intercept-url pattern="/admin/mail" access="hasAnyRole('ROLE_ADMIN')" />
 		<security:intercept-url pattern="/admin/updatemail" access="hasAnyRole('ROLE_ADMIN')" />
+		<security:intercept-url pattern="/admin/attachment" access="hasAnyRole('ROLE_ADMIN')" />
+		<security:intercept-url pattern="/admin/deleteattachment" access="hasAnyRole('ROLE_ADMIN')" />
 		
 		
 		<!-- DENY ALL -->
