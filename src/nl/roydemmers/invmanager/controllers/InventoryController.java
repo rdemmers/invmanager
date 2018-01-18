@@ -176,7 +176,7 @@ public class InventoryController extends AbstractController {
 	public String submitIssue(Model model, @Valid EmailMessage emailMessage, BindingResult result, HttpServletRequest request) {
 		Principal principal = request.getUserPrincipal();
 		User user = userService.getUserEmail(principal.getName());
-		inventoryMailService.sendIssueEmail(emailMessage, user);
+		inventoryMailService.createIssueEmail(emailMessage, user);
 		
 		emailMessage.setMailBody("Bericht is verzonden!");
 		return "about";

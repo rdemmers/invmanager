@@ -17,9 +17,8 @@ import nl.roydemmers.invmanager.objects.InventoryItem;
 import nl.roydemmers.invmanager.objects.Supplier;
 import nl.roydemmers.invmanager.objects.User;
 
-
 @Service("inventoryMailService")
-public class InventoryMailService{
+public class InventoryMailService {
 	@Autowired
 	private JavaBeanConfig javaBeanConfig;
 	@Autowired
@@ -28,89 +27,85 @@ public class InventoryMailService{
 	protected PreferenceService preferenceService;
 	@Autowired
 	protected ServletContext context;
-	
-	
-	// Creates and sends a template message with attachment if available
-	// Can be used to quickly send custom emails to suppliers when stock runs low
-	@Async
-	public void sendMessageWithAttachment(String attachment, InventoryItem inventoryItem) {
 
+	@Async
+	public void createIssueEmail(EmailMessage emailMessage, User user) {
+
+		String body = emailMessage.getMailBody();
+
+		body += "\n\n" + user.getUsername();
+		body += "\n" + user.getEmail();
+		body += "\n" + user.getAuthority();
+
+		String subject = "Issue report: " + user.getUsername();
+		String target = "chibitenshin@gmail.com";
+
+		this.sendMail(target, subject, body, "");
+		
+	}
+
+	@Async
+	public void createNotificationMail(InventoryItem inventoryItem) {
 		Supplier supplier = inventoryItem.getSupplier();
 
-		JavaMailSender mailSender = javaBeanConfig.getJavaMailSender(preferenceService);
+		String body = "";
 
-		String text = "";
+		body += "Het volgende product is onder het minimum gekomen:\n\n";
+		body += "Productnaam: " + inventoryItem.getName();
+		body += "\nProductcode: " + inventoryItem.getBarcode();
+		body += "\nHuidige Voorraad: " + inventoryItem.getCurrentStock();
+		body += "\nMinimum Voorraad: " + inventoryItem.getStockMinimum();
+		body += "\nPrijs: " + inventoryItem.getPrice();
+		body += "\n\nLeverancier: " + inventoryItem.getSupplier().getName();
+		body += "\nContactpersoon: " + supplier.getContact();
+		body += "\nBestel Email: " + supplier.getOrderMail();
+		body += "\nVragen Email: " + supplier.getQuestionMail();
+		body += "\nTelefoonnummer: " + supplier.getPhone();
+		body += "\n\n\nBericht voor de leverancier:";
+		body += "\n\n" + inventoryItem.getBarcode();
+		body += "\t" + inventoryItem.getName();
+		body += "\t" + inventoryItem.getOrderQuantity();
+		body += " x " + financialCalculationService.convertLongtoCurrency(inventoryItem.getPrice());
 
-		text += "Het volgende product is onder het minimum gekomen:\n\n";
-		text += "Productnaam: " + inventoryItem.getName();
-		text += "\nProductcode: " + inventoryItem.getBarcode();
-		text += "\nHuidige Voorraad: " + inventoryItem.getCurrentStock();
-		text += "\nMinimum Voorraad: " + inventoryItem.getStockMinimum();
-		text += "\nPrijs: " + inventoryItem.getPrice();
-		text += "\n\nLeverancier: " + inventoryItem.getSupplier();
-		text += "\nContactpersoon: " + supplier.getContact();
-		text += "\nBestel Email: " + supplier.getOrderMail();
-		text += "\nVragen Email: " + supplier.getQuestionMail();
-		text += "\nTelefoonnummer: " + supplier.getPhone();
-		text += "\n\n\nBericht voor de leverancier:";
-		text += "\n\n" + inventoryItem.getBarcode();
-		text += "\t" + inventoryItem.getName();
-		text += "\t" + inventoryItem.getOrderQuantity();
-		text += " x " + financialCalculationService.convertLongtoCurrency(inventoryItem.getPrice());
+		String target = preferenceService.getPreferenceValue("mailtarget");
+		String subject = "[INVENTORY-ERP][Minimum] Product: " + inventoryItem.getName();
+		String attachment = inventoryItem.getAttachment();
 
-		MimeMessage message = mailSender.createMimeMessage();
-		try {
-			MimeMessageHelper helper = new MimeMessageHelper(message, true);
-
-			helper.setTo(preferenceService.getPreferenceValue("mailtarget"));
-			helper.setSubject("[INVENTORY-ERP][Minimum] Product: " + inventoryItem.getName());
-			helper.setText(text);
-			
-			this.appendAttachment(attachment, helper);
-			Thread.sleep(1000L);
-			mailSender.send(message);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		this.sendMail(target, subject, body, attachment);
 
 	}
 	
 	@Async
 	public void appendAttachment(String attachment, MimeMessageHelper helper) {
-		if(attachment != null) {
-			FileSystemResource file = new FileSystemResource(context.getRealPath("/WEB-INF/attachments/")+ "/" + attachment);
+		if (attachment != null) {
+			FileSystemResource file = new FileSystemResource(context.getRealPath("/WEB-INF/attachments/") + "/" + attachment);
 			try {
 				helper.addAttachment(file.getFilename(), file);
 			} catch (MessagingException e) {
-				
+
 				e.printStackTrace();
 			}
-			}
+		}
 	}
 
+	@Async
+	public void sendMail(String target, String subject, String body, String attachment) {
 
-	public void sendIssueEmail(EmailMessage emailMessage, User user) {
-		
-		String emailContent = emailMessage.getMailBody();
-		
-		emailContent += "\n\n" + user.getUsername();
-		emailContent += "\n" + user.getEmail();
-		emailContent += "\n" + user.getAuthority();
-		
 		JavaMailSender mailSender = javaBeanConfig.getJavaMailSender(preferenceService);
-		
 		MimeMessage message = mailSender.createMimeMessage();
 		try {
 			MimeMessageHelper helper = new MimeMessageHelper(message, true);
-
-			helper.setTo("roydemmers@outlook.com");
-			helper.setSubject("Issue: " + user.getUsername());
-			helper.setText(emailContent);
+			helper.setTo(target);
+			helper.setSubject(subject);
+			helper.setText(body);
+			if(!attachment.isEmpty()) {
+				this.appendAttachment(attachment, helper);
+			}
 			
+			Thread.sleep(1000L);
 			mailSender.send(message);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
 }

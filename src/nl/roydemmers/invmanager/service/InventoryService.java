@@ -94,7 +94,7 @@ public class InventoryService {
 	public void checkStockForMail(int id) {
 		InventoryItem inventoryItem = this.getInventoryItem(id);
 		if (inventoryItem.getCurrentStock() <= inventoryItem.getStockMinimum()) {
-			inventoryMailService.sendMessageWithAttachment(inventoryItem.getAttachment(), inventoryItem);
+			inventoryMailService.createNotificationMail(inventoryItem);
 		}
 
 	}
