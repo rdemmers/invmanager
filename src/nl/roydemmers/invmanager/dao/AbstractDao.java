@@ -20,8 +20,6 @@ public abstract class AbstractDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
-	@Autowired
-	protected InventoryMailService inventoryMailService;
 	
 	public Session session() {
 		return sessionFactory.getCurrentSession();

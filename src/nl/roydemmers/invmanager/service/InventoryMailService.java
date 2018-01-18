@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import nl.roydemmers.invmanager.config.JavaBeanConfig;
@@ -29,6 +30,7 @@ public class InventoryMailService{
 	
 	// Creates and sends a template message with attachment if available
 	// Can be used to quickly send custom emails to suppliers when stock runs low
+	@Async
 	public void sendMessageWithAttachment(String attachment, InventoryItem inventoryItem) {
 
 		Supplier supplier = inventoryItem.getSupplier();
@@ -63,7 +65,7 @@ public class InventoryMailService{
 			helper.setText(text);
 			
 			this.appendAttachment(attachment, helper);
-			
+			Thread.sleep(1000L);
 			mailSender.send(message);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -71,6 +73,7 @@ public class InventoryMailService{
 
 	}
 	
+	@Async
 	public void appendAttachment(String attachment, MimeMessageHelper helper) {
 		if(attachment != null) {
 			FileSystemResource file = new FileSystemResource(context.getRealPath("/WEB-INF/attachments/")+ "/" + attachment);
