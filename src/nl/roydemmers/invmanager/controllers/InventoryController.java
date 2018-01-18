@@ -63,6 +63,7 @@ public class InventoryController extends AbstractController {
 
 		InventoryItem inventoryItem = inventoryItemTemp.convertPriceToLong();
 
+		inventoryItem.setAttachment("");
 		inventoryService.create(inventoryItem);
 
 		return JspPage.NEW_ITEM_SUCCES;
