@@ -127,3 +127,4 @@ webcontent/
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 src/nl/roydemmers/invmanager/mail/success.png
+test/nl/roydemmers/invmanager/test/config/jdbc.properties

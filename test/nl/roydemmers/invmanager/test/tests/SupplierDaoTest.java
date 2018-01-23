@@ -1,0 +1,70 @@
+package nl.roydemmers.invmanager.test.tests;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import nl.roydemmers.invmanager.dao.InventoryDao;
+import nl.roydemmers.invmanager.dao.SupplierDao;
+import nl.roydemmers.invmanager.objects.InventoryItem;
+import nl.roydemmers.invmanager.objects.Supplier;
+
+@ActiveProfiles("dev")
+@ContextConfiguration(locations = { "classpath:nl/roydemmers/invmanager/config/dao-context.xml", "classpath:nl/roydemmers/invmanager/config/security-context.xml",
+		"classpath:nl/roydemmers/invmanager/test/config/datasource.xml"})
+@RunWith(SpringJUnit4ClassRunner.class)
+public class SupplierDaoTest {
+
+	@Autowired
+	private SupplierDao supplierDao;
+	
+	@Autowired
+	private DataSource dataSource;
+	
+	@Before
+	public void init() {
+		JdbcTemplate jdbc = new JdbcTemplate(dataSource);
+		jdbc.execute("delete from suppliers");
+	}
+	
+	@Test
+	public void testCreateSupplier() {
+		Supplier supplier1 = new Supplier("Supplier A", "Jane Doe", "orderstuff@ordermail.com", "questions@questionmail.com", "071991992");
+		Supplier supplier2 = new Supplier("Supplier B", "Jane Doe", "orderstuff@ordermail.com", "questions@questionmail.com", "071991992");
+		Supplier supplier3 = new Supplier("Supplier C", "Jane Doe", "orderstuff@ordermail.com", "questions@questionmail.com", "071991992");
+		Supplier supplier4 = new Supplier("Supplier D", "Jane Doe", "orderstuff@ordermail.com", "questions@questionmail.com", "071991992");
+		Supplier supplier5 = new Supplier("Supplier E", "Jane Doe", "orderstuff@ordermail.com", "questions@questionmail.com", "071991992");
+		
+		supplierDao.create(supplier1);
+		supplierDao.create(supplier2);
+		supplierDao.create(supplier3);
+		supplierDao.create(supplier4);
+		supplierDao.create(supplier5);
+		
+		List<Supplier> suppliers = supplierDao.getAllSuppliers();
+		
+		assertEquals("Number of suppliers should be 5", 5, suppliers.size());
+		assertEquals("Created supplier should be identical to retrieved supplier", supplier1, suppliers.get(0));
+		
+		supplierDao.delete("Supplier B");
+		supplierDao.delete("Supplier C");
+		
+		List<Supplier> suppliersDeleted = supplierDao.getAllSuppliers();
+		
+		assertEquals("Number of suppliers should be 3 after deletion", 3, suppliersDeleted.size());
+		
+	}
+	
+}

@@ -42,5 +42,6 @@ public class SupplierDao extends AbstractDao {
 		crit.add(Restrictions.eq("supplierId", id));
 		return (Supplier)crit.uniqueResult();
 	}
+	
 
 }
