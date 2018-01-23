@@ -1,37 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:security="http://www.springframework.org/schema/security"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
 	<security:authentication-manager>
 		<security:authentication-provider>
-			<security:jdbc-user-service data-source-ref="dataSource" authorities-by-username-query='select username, authority from users where binary username = ?' users-by-username-query='select username, password, enabled from users where binary username = ?' id="jdbcUserService" />
+			<security:jdbc-user-service data-source-ref="dataSource" authorities-by-username-query='select username, authority from users where binary username = ?'
+				users-by-username-query='select username, password, enabled from users where binary username = ?' id="jdbcUserService" />
 			<security:password-encoder ref="passwordEncoder"></security:password-encoder>
 		</security:authentication-provider>
 	</security:authentication-manager>
-	<!--  
-		Role Hierarchy:
-		
-		Admin access = hasAnyRole('ROLE_ADMIN')
-		Mod accesss  = hasAnyRole('ROLE_ADMIN', 'ROLE_MOD')
-		User access  = isAuthenticated();
-	
-	-->
-		<security:http use-expressions="true">
+	<!-- Role Hierarchy: Admin access = hasAnyRole('ROLE_ADMIN') Mod accesss = hasAnyRole('ROLE_ADMIN', 'ROLE_MOD') User access = isAuthenticated(); -->
+	<security:http use-expressions="true">
 		<security:intercept-url pattern="/" access="isAuthenticated()" />
 		<security:intercept-url pattern="/favicon.ico" access="permitAll" />
-		
-		<!--  MISC -->
+
+		<!-- MISC -->
 		<security:intercept-url pattern="/loggedout" access="permitAll" />
 		<security:intercept-url pattern="/login" access="permitAll" />
 		<security:intercept-url pattern="/static/**" access="permitAll" />
 		<security:intercept-url pattern="/about" access="isAuthenticated()" />
 		<security:intercept-url pattern="/submitissue" access="isAuthenticated()" />
-		
-		<!--  INVENTORY VIEW -->
+
+		<!-- INVENTORY VIEW -->
 		<security:intercept-url pattern="/inventoryitems" access="isAuthenticated()" />
 		<security:intercept-url pattern="/statistics" access="isAuthenticated()" />
 		<security:intercept-url pattern="/refreshinfo" access="isAuthenticated()" />
@@ -39,7 +31,7 @@
 		<security:intercept-url pattern="/itemcreated" access="isAuthenticated()" />
 		<security:intercept-url pattern="/getnotification" access="isAuthenticated()" />
 		<security:intercept-url pattern="/getinventorytable" access="isAuthenticated()" />
-		
+
 		<!-- INVENTORY MODIFACTION -->
 		<security:intercept-url pattern="/mutateitem" access="isAuthenticated()" />
 		<security:intercept-url pattern="/edititem" access="hasAnyRole('ROLE_ADMIN', 'ROLE_MOD')" />
@@ -48,9 +40,9 @@
 		<security:intercept-url pattern="/docreate" access="hasAnyRole('ROLE_ADMIN', 'ROLE_MOD')" />
 		<security:intercept-url pattern="/dodelete" access="hasAnyRole('ROLE_ADMIN', 'ROLE_MOD')" />
 		<security:intercept-url pattern="/createinventoryitem" access="hasAnyRole('ROLE_ADMIN', 'ROLE_MOD')" />
-		
-		
-		
+
+
+
 		<!-- ADMINISTRATOR DASHBOARD -->
 		<security:intercept-url pattern="/admin" access="hasAnyRole('ROLE_ADMIN')" />
 		<security:intercept-url pattern="/admin/newaccount" access="hasAnyRole('ROLE_ADMIN')" />
@@ -67,22 +59,21 @@
 		<security:intercept-url pattern="/admin/updatemail" access="hasAnyRole('ROLE_ADMIN')" />
 		<security:intercept-url pattern="/admin/attachment" access="hasAnyRole('ROLE_ADMIN')" />
 		<security:intercept-url pattern="/admin/deleteattachment" access="hasAnyRole('ROLE_ADMIN')" />
-		
-		
+
+
 		<!-- DENY ALL -->
 		<security:intercept-url pattern="/**" access="denyAll" />
-		
-		<security:form-login login-page="/login"
-			authentication-failure-url="/login?error=true" />
+
+		<security:form-login login-page="/login" authentication-failure-url="/login?error=true" />
 		<security:logout logout-success-url="/loggedout" />
 		<security:csrf disabled="true" />
+		<security:remember-me key="InventoryManagerKey" user-service-ref="jdbcUserService" />
 	</security:http>
-	
 
-	
-	
-	<bean id="passwordEncoder"
-		class="org.springframework.security.crypto.password.StandardPasswordEncoder">
+
+
+
+	<bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder">
 	</bean>
-	
+
 </beans>

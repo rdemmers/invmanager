@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import nl.roydemmers.invmanager.dao.InventoryDao;
 import nl.roydemmers.invmanager.dao.InventoryLogItemDao;
 import nl.roydemmers.invmanager.objects.InventoryItem;
@@ -23,6 +22,7 @@ public class InventoryService {
 	private InventoryMailService inventoryMailService;
 
 
+	
 	public List<InventoryItem> getAllInventoryItems() {
 		return inventoryDao.getInventoryList();
 	}
