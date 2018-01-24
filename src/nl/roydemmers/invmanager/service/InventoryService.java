@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import nl.roydemmers.invmanager.dao.InventoryDao;
 import nl.roydemmers.invmanager.dao.InventoryLogItemDao;
@@ -22,11 +23,12 @@ public class InventoryService {
 	private InventoryMailService inventoryMailService;
 
 
-	
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<InventoryItem> getAllInventoryItems() {
 		return inventoryDao.getInventoryList();
 	}
 	
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<InventoryItem> getItemsWithAttachment(){
 		List<InventoryItem> inventoryItems = this.getAllInventoryItems();
 		List<InventoryItem> inventoryAttachments = new ArrayList<>();
@@ -42,6 +44,7 @@ public class InventoryService {
 	}
 
 	// To display a List with items under the stock minimum
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<InventoryItem> getLowInventoryItems() {
 		List<InventoryItem> inventoryList = inventoryDao.getInventoryList();
 		List<InventoryItem> lowList = new ArrayList<>();
@@ -55,6 +58,7 @@ public class InventoryService {
 	}
 
 	// Display the last x changes in inventory amount
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<InventoryLogItem> getRecentChanges(boolean getAll) {
 
 		List<InventoryLogItem> inventoryLogList = inventoryLogItemDao.getQuantityChangesHistory();
@@ -80,6 +84,7 @@ public class InventoryService {
 		return inventoryLogList;
 	}
 
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<InventoryLogItem> shortenInventoryLogList(List<InventoryLogItem> inventoryLogList, int listLength) {
 
 		if (inventoryLogList.size() > listLength) {
@@ -89,22 +94,27 @@ public class InventoryService {
 		return inventoryLogList;
 	}
 
+	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	public void deleteInventoryItem(int id) {
 		inventoryDao.delete(id);
 	}
 
+	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	public void create(InventoryItem inventoryItem) {
 		inventoryDao.create(inventoryItem);
 	}
 
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public InventoryItem getInventoryItem(int id) {
 		return inventoryDao.getInventoryItem(id);
 	}
 
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void updateInventoryItem(InventoryItem inventoryItem) {
 		inventoryDao.update(inventoryItem);
 	}
 
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void checkStockForMail(int id) {
 		InventoryItem inventoryItem = this.getInventoryItem(id);
 		if (inventoryItem.getCurrentStock() <= inventoryItem.getStockMinimum()) {
@@ -115,6 +125,7 @@ public class InventoryService {
 
 	// Since log items aren't stored with all their properties this function appends the object
 	// with values from the database
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void fillLogItemWithItemProps(InventoryLogItem logItem, InventoryItem inventoryItem) {
 
 		logItem.setProductName(inventoryItem.getName());
@@ -129,6 +140,7 @@ public class InventoryService {
 	}
 	
 	// Used to circumvent issues with double values in money and makes it easier to manipulate objects through the front end.
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public InventoryItem convertTempItemToFullObject(InventoryItemDoubleValue inventoryItemTemp, InventoryItem currentItem) {
 		InventoryItem inventoryItem = inventoryItemTemp.convertPriceToLong();
 		

@@ -25,19 +25,23 @@ public class SupplierService{
 		this.supplierDao = supplierDao;
 	}
 	
+	@Secured("ROLE_ADMIN")
 	public void create(Supplier supplier) {
 		supplierDao.create(supplier);
 	}
 	
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public Supplier getSupplier(int id) {
 		return supplierDao.getSupplier(id);
 		
 	}
 	
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<Supplier> getAllSuppliers(){
 		return supplierDao.getAllSuppliers();
 	}
 	
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void setSupplierWorth(int id, long worth) {
 		Supplier supplier = supplierDao.getSupplier(id);
 		supplier.setTotalWorth(worth);
@@ -46,6 +50,7 @@ public class SupplierService{
 	}
 	
 	// Used to easily access the supplier list front end
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<Supplier> convertSupplierHashmapToObjectList(Map<Integer,Long> map){
 		Iterator<Map.Entry<Integer, Long>> it = map.entrySet().iterator();
 		while(it.hasNext()) {
@@ -57,10 +62,12 @@ public class SupplierService{
 		return this.getAllSuppliers();
 	}
 	
+	@Secured("ROLE_ADMIN")
 	public void update(Supplier supplier) {
 		supplierDao.update(supplier);
 	}
 	
+	@Secured("ROLE_ADMIN")
 	public void delete(Supplier supplier) {
 		
 		supplierDao.delete(supplier.getName());

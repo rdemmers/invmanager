@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import nl.roydemmers.invmanager.dao.GlobalPrefDao;
@@ -26,22 +27,27 @@ public class PreferenceService {
 		return globalPrefDao.getPreference(name).getValue();
 	}
 	
+	@Secured("ROLE_ADMIN")
 	public void updateGlobalPreference(GlobalPref preference) {
 		globalPrefDao.setPreference(preference);
 	}
 	
+	@Secured("ROLE_ADMIN")
 	public Map<String, GlobalPref> getPreferences(){
 		return globalPrefDao.getAllPreferences();
 	}
 	
+	@Secured("ROLE_ADMIN")
 	public Map<String, String> getPreferenceGroup(String group){
 		return globalPrefDao.getPreferenceGroup(group);
 	}
 	
+	@Secured("ROLE_ADMIN")
 	public List<GlobalPref> getPreferenceGroupList(String group){
 		return globalPrefDao.getPreferenceGroupList(group);
 	}
 	
+	@Secured("ROLE_ADMIN")
 	public void updateAllPreferencesInDb(Map<String, String> preferenceMap) {
 		for(Map.Entry<String, String> entry : preferenceMap.entrySet()){
 			  GlobalPref preference =  this.getPreference(entry.getKey());

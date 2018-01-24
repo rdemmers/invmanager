@@ -7,6 +7,7 @@ import java.util.Map;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,11 +29,13 @@ public class GlobalPrefDao extends AbstractDao {
 		
 	}
 	
+	@Secured("ROLE_ADMIN")
 	public void setPreference(GlobalPref globalPref) {
 		session().update(globalPref);
 		
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@SuppressWarnings("unchecked")
 	public Map<String, GlobalPref> getAllPreferences(){
 		List<GlobalPref> preferenceList = session().createQuery("from GlobalPref").list();
@@ -44,6 +47,7 @@ public class GlobalPrefDao extends AbstractDao {
 		return preferenceMap;
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@SuppressWarnings("unchecked")
 	public Map<String, String> getPreferenceGroup(String group){
 		Map<String,String> preferenceMap = new HashMap<String,String>();
@@ -59,6 +63,7 @@ public class GlobalPrefDao extends AbstractDao {
 		return preferenceMap;
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@SuppressWarnings("unchecked")
 	public List<GlobalPref> getPreferenceGroupList(String group){
 		

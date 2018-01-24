@@ -19,15 +19,18 @@ public class UserService {
 		this.userDao = userDao;
 	}
 	
+	@Secured("ROLE_ADMIN")
 	public void create(User user) {
 		userDao.create(user);
 	}
 	
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public User getUserEmail(String username) {
 		return userDao.getUserEmail(username);
 		
 	}
 	
+	@Secured("ROLE_ADMIN")
 	public List<User> getAllUsers() {
 		return userDao.getUserList();
 		

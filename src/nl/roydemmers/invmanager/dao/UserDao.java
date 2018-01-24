@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +15,7 @@ import nl.roydemmers.invmanager.objects.User;
 public class UserDao extends AbstractDao {
 	
 
-
+	@Secured("ROLE_ADMIN")
 	@Transactional
 	public void create(User user) {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -22,6 +23,7 @@ public class UserDao extends AbstractDao {
 		
 	}
 	
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public User getUserEmail(String username) {
 		
 		Criteria crit = session().createCriteria(User.class);
@@ -31,6 +33,7 @@ public class UserDao extends AbstractDao {
 		
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@SuppressWarnings("unchecked")
 	public List<User> getUserList(){
 		return session().createQuery("from User").list();

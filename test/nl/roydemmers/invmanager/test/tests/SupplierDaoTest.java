@@ -60,11 +60,22 @@ public class SupplierDaoTest {
 		
 		supplierDao.delete("Supplier B");
 		supplierDao.delete("Supplier C");
+		supplierDao.delete("Supplier E");
 		
 		List<Supplier> suppliersDeleted = supplierDao.getAllSuppliers();
 		
-		assertEquals("Number of suppliers should be 3 after deletion", 3, suppliersDeleted.size());
+		assertEquals("Number of suppliers should be 2 after deletion", 2, suppliersDeleted.size());
 		
+		supplier1.setName("Actual supplier name");
+		supplier5.setOrderMail("hotmail@gmail.com");
+		
+		supplierDao.update(supplier1);
+		supplierDao.update(supplier5);
+		
+		List<Supplier> suppliersUpdated = supplierDao.getAllSuppliers();
+		
+		assertEquals("Supplier1 hasn't properly updated in the database", supplier1.getName(), suppliersUpdated.get(0).getName());
+		assertEquals("Supplier6 hasn't properly updated in the database", supplier1.getOrderMail(), suppliersUpdated.get(1).getOrderMail());
 	}
 	
 }

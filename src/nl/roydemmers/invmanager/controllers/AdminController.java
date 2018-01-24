@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,6 +30,7 @@ public class AdminController extends AbstractController {
 	
 	private Supplier currentSupplier;
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/admin")
 	public String showAdminDashboard(Model model) {
 		List<User> userList = userService.getAllUsers();
@@ -37,6 +39,7 @@ public class AdminController extends AbstractController {
 		return "admindashboard";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping("/admin/newaccount")
 	public String showNewAccount(Model model) {
 
@@ -44,6 +47,7 @@ public class AdminController extends AbstractController {
 		return "newaccount";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/admin/createaccount", method = RequestMethod.POST)
 	public String createAccount(@Valid User user, BindingResult result, Model model) {
 
@@ -61,6 +65,7 @@ public class AdminController extends AbstractController {
 		return "admindashboard";
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value ="/admin/suppliers")
 	public String showSupplierConfig(Model model) {
 		List<Supplier> supplierList = supplierService.getAllSuppliers();
@@ -70,6 +75,7 @@ public class AdminController extends AbstractController {
 	}
 	
 	
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/admin/supplierdatabasecall", method = RequestMethod.POST)
 	public String displayAdditionItemInformation(Model model, HttpServletRequest request) {
 		currentSupplier = supplierService.getSupplier(Integer.parseInt(request.getParameter("supplier_id")));
@@ -82,6 +88,7 @@ public class AdminController extends AbstractController {
 
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/admin/refreshsupplier", method = RequestMethod.GET)
 	public String refreshInfo(Model model, HttpServletRequest request) {
 		model.addAttribute("currentSupplier", currentSupplier);
@@ -90,6 +97,7 @@ public class AdminController extends AbstractController {
 
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/admin/doupdate", method = RequestMethod.POST)
 	public String editItemPOST(Model model, Supplier editCurrentSupplier, BindingResult result, HttpServletRequest request) {
 
@@ -103,6 +111,7 @@ public class AdminController extends AbstractController {
 		return "suppliercreated";
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "admin/dodeletesupplier", method = RequestMethod.POST)
 	public String deleteSelectedSupplierPOST(Model model, HttpServletRequest request) {
 		currentSupplier = supplierService.getSupplier(Integer.parseInt(request.getParameter("supplier_id")));
@@ -110,6 +119,7 @@ public class AdminController extends AbstractController {
 		return "suppliers";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping("/admin/createsupplier")
 	public String createNewInventoryItemForm(Model model) {
 		model.addAttribute("supplier", new Supplier());
@@ -117,6 +127,7 @@ public class AdminController extends AbstractController {
 		return "createsupplier";
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/admin/docreate", method = RequestMethod.POST)
 	public String createNewInventoryItemPOST(Model model, @Valid Supplier supplier, BindingResult result) {
 
@@ -131,6 +142,7 @@ public class AdminController extends AbstractController {
 		return "suppliercreated";
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/admin/mail")
 	public String refreshInfo(Model model) {
 		Map<String, String> preferenceMap = preferenceService.getPreferenceGroup("mail");
@@ -140,6 +152,7 @@ public class AdminController extends AbstractController {
 
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/admin/updatemail", method = RequestMethod.POST)
 	public String updateMail(Model model, @RequestParam Map<String,String> allRequests) {
 		
@@ -151,7 +164,8 @@ public class AdminController extends AbstractController {
 		return "mail";
 	}
 
-	
+
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value ="/admin/attachment")
 	public String showAttachments(Model model) {
 		List<InventoryItem> itemsWithAttachment = inventoryService.getItemsWithAttachment();
@@ -161,6 +175,7 @@ public class AdminController extends AbstractController {
 		return "attachment";
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/admin/deleteattachment", method = RequestMethod.POST)
 	public String deleteAttachment(Model model, HttpServletRequest request) {
 

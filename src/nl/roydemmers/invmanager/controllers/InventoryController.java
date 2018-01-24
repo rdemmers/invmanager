@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,6 +30,7 @@ import nl.roydemmers.invmanager.objects.User;
 public class InventoryController extends AbstractController {
 
 	// Shows main inventorytable
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = { "/inventoryitems", "/" })
 	public String showInventoryOverview(Model model) {
 
@@ -43,6 +45,7 @@ public class InventoryController extends AbstractController {
 	// Shows a form to create a new item
 	// Temporarily maps the item to a seperate object, needed to convert price
 	// double to a long
+	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping("/createinventoryitem")
 	public String createNewInventoryItemForm(Model model) {
 		model.addAttribute("inventoryItemTemp", new InventoryItemDoubleValue());
@@ -51,6 +54,7 @@ public class InventoryController extends AbstractController {
 	}
 
 	// Logic to add the item created in /createinventoryitem
+	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/docreate", method = RequestMethod.POST)
 	public String createNewInventoryItemPOST(Model model, @Valid InventoryItemDoubleValue inventoryItemTemp, BindingResult result, HttpServletRequest request) {
 
@@ -69,6 +73,7 @@ public class InventoryController extends AbstractController {
 		return JspPage.NEW_ITEM_SUCCES;
 	}
 
+	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/edititem", method = RequestMethod.GET)
 	public String editItemForm(Model model, @RequestParam("id") int id) {
 
@@ -79,6 +84,7 @@ public class InventoryController extends AbstractController {
 	}
 
 	//Handles the logic for updating an item. Also adds an attachment if the attachment field isn't empty
+	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/doupdate", method = RequestMethod.POST)
 	public String editItemPOST(Model model, InventoryItemDoubleValue inventoryItemTemp, BindingResult result, @RequestParam CommonsMultipartFile[] fileUpload) {
 
@@ -99,6 +105,7 @@ public class InventoryController extends AbstractController {
 		return JspPage.NEW_ITEM_SUCCES;
 	}
 
+	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/dodelete", method = RequestMethod.POST)
 	public String deleteSelectedItemPOST(Model model, HttpServletRequest request) {
 		int id = Integer.parseInt(request.getParameter("product_id"));
@@ -109,6 +116,7 @@ public class InventoryController extends AbstractController {
 	// Used to select an item from the html table in JspPage.INVENTORY_OVERVIEW.
 	// Returns an
 	// item based on the barcode, parsed via the POST parameter "product_id"
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/databasecall", method = RequestMethod.POST)
 	public String displayAdditionItemInformation(Model model, HttpServletRequest request) {
 		int id = Integer.parseInt(request.getParameter("product_id"));
@@ -122,6 +130,7 @@ public class InventoryController extends AbstractController {
 
 	// Uses POST_param "product_mutate" to add or subtract stock from an item based
 	// on the barcode.
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/mutateitem", method = RequestMethod.POST)
 	public String mutateSelectedItemPOST(Model model, HttpServletRequest request) {
 		Principal principal = request.getUserPrincipal();
@@ -143,6 +152,7 @@ public class InventoryController extends AbstractController {
 
 	// Contains the sidebar with detailed information about the selected item.
 	// Seperated to auto-refresh it using javacript.
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/refreshinfo", method = RequestMethod.GET)
 	public String refreshInfo(Model model, HttpServletRequest request) {
 		model.addAttribute("inventoryitembarcode", currentItem);
@@ -151,6 +161,7 @@ public class InventoryController extends AbstractController {
 
 	}
 
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/statistics")
 	public String showInventoryStatistics(Model model) {
 
@@ -167,12 +178,14 @@ public class InventoryController extends AbstractController {
 		return JspPage.INVENTORY_STATISTICS;
 	}
 
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping("/about")
 	public String showAbout(Model model) {
 		model.addAttribute("emailMessage", new EmailMessage());
 		return "about";
 	}
 	
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value="/submitissue", method= RequestMethod.POST)
 	public String submitIssue(Model model, @Valid EmailMessage emailMessage, BindingResult result, HttpServletRequest request) {
 		Principal principal = request.getUserPrincipal();

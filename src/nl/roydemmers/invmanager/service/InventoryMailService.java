@@ -9,6 +9,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import nl.roydemmers.invmanager.config.JavaBeanConfig;
@@ -29,6 +30,7 @@ public class InventoryMailService {
 	protected ServletContext context;
 
 	@Async
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void createIssueEmail(EmailMessage emailMessage, User user) {
 
 		String body = emailMessage.getMailBody();
@@ -45,6 +47,7 @@ public class InventoryMailService {
 	}
 
 	@Async
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void createNotificationMail(InventoryItem inventoryItem) {
 		Supplier supplier = inventoryItem.getSupplier();
 
@@ -76,6 +79,7 @@ public class InventoryMailService {
 	}
 	
 	@Async
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void appendAttachment(String attachment, MimeMessageHelper helper) {
 		if (attachment != null) {
 			FileSystemResource file = new FileSystemResource(context.getRealPath("/WEB-INF/attachments/") + "/" + attachment);
@@ -89,6 +93,7 @@ public class InventoryMailService {
 	}
 
 	@Async
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void sendMail(String target, String subject, String body, String attachment) {
 
 		JavaMailSender mailSender = javaBeanConfig.getJavaMailSender(preferenceService);
