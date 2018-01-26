@@ -17,6 +17,8 @@
 		<security:intercept-url pattern="/" access="isAuthenticated()" />
 		<security:intercept-url pattern="/favicon.ico" access="permitAll" />
 
+		<security:intercept-url pattern="/api/**" access="permitAll" />
+		
 		<!-- MISC -->
 		<security:intercept-url pattern="/loggedout" access="permitAll" />
 		<security:intercept-url pattern="/login" access="permitAll" />
