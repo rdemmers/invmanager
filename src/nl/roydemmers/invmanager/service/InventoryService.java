@@ -3,6 +3,7 @@ package nl.roydemmers.invmanager.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -12,6 +13,7 @@ import nl.roydemmers.invmanager.dao.InventoryLogItemDao;
 import nl.roydemmers.invmanager.objects.InventoryItem;
 import nl.roydemmers.invmanager.objects.InventoryItemDoubleValue;
 import nl.roydemmers.invmanager.objects.InventoryLogItem;
+import nl.roydemmers.invmanager.objects.Supplier;
 
 @Service("inventoryService")
 public class InventoryService {
@@ -39,7 +41,33 @@ public class InventoryService {
 			}
 		}
 		
-		return inventoryAttachments;
+		return inventoryAttachments;	
+	}
+	
+	public InventoryItem mapJsonToObject(Map<String,Object> data) {
+		int id = (Integer)data.get("id");
+		String barcode = (String)data.get("barcode");
+		int deliveryTime = (Integer)data.get("deliveryTime");
+		long price = new Long((Integer)data.get("price"));
+		String name = (String)data.get("name");
+		int orderQuantity = (Integer)data.get("orderQuantity");
+		int currentStock = (Integer)data.get("currentStock");
+		int stockMinimum = (Integer)data.get("stockMinimum");
+		String attachment = (String)data.get("attachment");
+		
+		@SuppressWarnings("unchecked")
+		Map<String,Object> supplierMap = (Map<String, Object>)data.get("supplier");
+		
+		int supplierId= (Integer)supplierMap.get("supplierId");
+		String supplierName = (String)supplierMap.get("name");
+		String contact = (String)supplierMap.get("contact");
+		String orderMail = (String)supplierMap.get("orderMail");
+		String questionMail = (String)supplierMap.get("questionMail");
+		String phone = (String)supplierMap.get("phone");
+		
+		Supplier supplier = new Supplier(supplierId, supplierName, contact, orderMail, questionMail, phone);
+		return new InventoryItem(id, barcode, deliveryTime, price, name, orderQuantity, currentStock, stockMinimum, supplier, attachment);
+		
 		
 	}
 

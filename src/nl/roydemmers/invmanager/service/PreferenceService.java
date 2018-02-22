@@ -19,32 +19,32 @@ public class PreferenceService {
 
 	
 	public GlobalPref getPreference(String name) {
-		return globalPrefDao.getPreference(name);
+		return globalPrefDao.get(name);
 		 
 	}
 	
 	public String getPreferenceValue(String name) {
-		return globalPrefDao.getPreference(name).getValue();
+		return globalPrefDao.get(name).getValue();
 	}
 	
 	@Secured("ROLE_ADMIN")
 	public void updateGlobalPreference(GlobalPref preference) {
-		globalPrefDao.setPreference(preference);
+		globalPrefDao.set(preference);
 	}
 	
 	@Secured("ROLE_ADMIN")
 	public Map<String, GlobalPref> getPreferences(){
-		return globalPrefDao.getAllPreferences();
+		return globalPrefDao.getAll();
 	}
 	
 	@Secured("ROLE_ADMIN")
 	public Map<String, String> getPreferenceGroup(String group){
-		return globalPrefDao.getPreferenceGroup(group);
+		return globalPrefDao.getGroup(group);
 	}
 	
 	@Secured("ROLE_ADMIN")
 	public List<GlobalPref> getPreferenceGroupList(String group){
-		return globalPrefDao.getPreferenceGroupList(group);
+		return globalPrefDao.getList(group);
 	}
 	
 	@Secured("ROLE_ADMIN")

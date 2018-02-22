@@ -20,7 +20,7 @@ public class GlobalPrefDao extends AbstractDao {
 	
 	
 	@SuppressWarnings("unchecked")
-	public GlobalPref getPreference(String name) {
+	public GlobalPref get(String name) {
 		
 		Criteria crit = session().createCriteria(GlobalPref.class);
 		crit.add(Restrictions.eq("name", name));
@@ -30,14 +30,14 @@ public class GlobalPrefDao extends AbstractDao {
 	}
 	
 	@Secured("ROLE_ADMIN")
-	public void setPreference(GlobalPref globalPref) {
+	public void set(GlobalPref globalPref) {
 		session().update(globalPref);
 		
 	}
 	
 	@Secured("ROLE_ADMIN")
 	@SuppressWarnings("unchecked")
-	public Map<String, GlobalPref> getAllPreferences(){
+	public Map<String, GlobalPref> getAll(){
 		List<GlobalPref> preferenceList = session().createQuery("from GlobalPref").list();
 		Map<String,GlobalPref> preferenceMap = new HashMap<String,GlobalPref>();
 		for(GlobalPref globalPref : preferenceList) {
@@ -49,7 +49,7 @@ public class GlobalPrefDao extends AbstractDao {
 	
 	@Secured("ROLE_ADMIN")
 	@SuppressWarnings("unchecked")
-	public Map<String, String> getPreferenceGroup(String group){
+	public Map<String, String> getGroup(String group){
 		Map<String,String> preferenceMap = new HashMap<String,String>();
 		
 		Criteria crit = session().createCriteria(GlobalPref.class);
@@ -65,7 +65,7 @@ public class GlobalPrefDao extends AbstractDao {
 	
 	@Secured("ROLE_ADMIN")
 	@SuppressWarnings("unchecked")
-	public List<GlobalPref> getPreferenceGroupList(String group){
+	public List<GlobalPref> getList(String group){
 		
 		Criteria crit = session().createCriteria(GlobalPref.class);
 		crit.add(Restrictions.eq("group", group));

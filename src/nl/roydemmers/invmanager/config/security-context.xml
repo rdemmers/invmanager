@@ -79,5 +79,5 @@
 	<bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder">
 	</bean>
 
-	<security:global-method-security secured-annotations="enabled"></security:global-method-security>
+	<security:global-method-security secured-annotations="disabled"></security:global-method-security>
 </beans>
