@@ -32,6 +32,16 @@ public class ApiController extends AbstractController{
 		return items;
 	}
 	
+	@RequestMapping(value="/items/low", method=RequestMethod.GET, produces="application/json")
+	@ResponseBody
+	public List<InventoryItem> getLowItems() {
+		
+		List<InventoryItem> items = inventoryService.getLowInventoryItems();
+		
+		
+		return items;
+	}
+	
 	@RequestMapping(value="/items/{id}", method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public InventoryItem getSingleItem(@PathVariable("id") int id) {
@@ -42,9 +52,19 @@ public class ApiController extends AbstractController{
 	@RequestMapping(value="/items/{id}", method=RequestMethod.POST, produces="application/json")
 	@ResponseBody
 	public InventoryItem updateItem(@PathVariable("id") int id, @RequestBody Map<String, Object> data) {
+		System.out.println(data);
 		InventoryItem inventoryItem = inventoryService.mapJsonToObject(data);
 		inventoryService.updateInventoryItem(inventoryItem);
 		return inventoryService.getInventoryItem(id);
+	}
+	
+	@RequestMapping(value="/items/new", method=RequestMethod.POST, produces="application/json")
+	@ResponseBody
+	public List<InventoryItem> createItem(@RequestBody Map<String, Object> data) {
+		System.out.println(data);
+		InventoryItem inventoryItem = inventoryService.mapJsonToObject(data);
+		inventoryService.create(inventoryItem);
+		return inventoryService.getAllInventoryItems();
 	}
 	
 	

@@ -53,6 +53,19 @@ public class InventoryItem {
 		this.attachment = attachment;
 	}
 	
+	public InventoryItem(String barcode, int deliveryTime, long price, String name, int orderQuantity,
+			int currentStock, int stockMinimum, Supplier supplier, String attachment) {
+		this.barcode = barcode;
+		this.deliveryTime = deliveryTime;
+		this.price = price;
+		this.name = name;
+		this.orderQuantity = orderQuantity;
+		this.currentStock = currentStock;
+		this.stockMinimum = stockMinimum;
+		this.supplierId = supplier;
+		this.attachment = attachment;
+	}
+	
 	
 	public InventoryItemDoubleValue convertPriceToDouble() {
 		InventoryItemDoubleValue conversion = new InventoryItemDoubleValue();

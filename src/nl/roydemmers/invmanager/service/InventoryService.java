@@ -23,6 +23,8 @@ public class InventoryService {
 	private InventoryLogItemDao inventoryLogItemDao;
 	@Autowired
 	private InventoryMailService inventoryMailService;
+	@Autowired
+	private SupplierService supplierService;
 
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
@@ -45,27 +47,32 @@ public class InventoryService {
 	}
 	
 	public InventoryItem mapJsonToObject(Map<String,Object> data) {
-		int id = (Integer)data.get("id");
+		// Check for an id in the map data
+		// an update to a product will have an ID, no id means that the product must be new
+		
+		boolean newProduct = true;
+		int id = 0;
+		if(data.get("id") != null) {
+			id = (Integer)data.get("id");
+			newProduct = false;
+		}
+		
 		String barcode = (String)data.get("barcode");
-		int deliveryTime = (Integer)data.get("deliveryTime");
-		long price = new Long((Integer)data.get("price"));
+		int deliveryTime = Integer.parseInt(data.get("deliveryTime").toString());
+		long price = Long.parseLong(data.get("price").toString());
 		String name = (String)data.get("name");
-		int orderQuantity = (Integer)data.get("orderQuantity");
-		int currentStock = (Integer)data.get("currentStock");
-		int stockMinimum = (Integer)data.get("stockMinimum");
+		int orderQuantity = Integer.parseInt(data.get("orderQuantity").toString());
+		int currentStock = Integer.parseInt(data.get("currentStock").toString());
+		int stockMinimum = Integer.parseInt(data.get("stockMinimum").toString());
 		String attachment = (String)data.get("attachment");
 		
-		@SuppressWarnings("unchecked")
-		Map<String,Object> supplierMap = (Map<String, Object>)data.get("supplier");
 		
-		int supplierId= (Integer)supplierMap.get("supplierId");
-		String supplierName = (String)supplierMap.get("name");
-		String contact = (String)supplierMap.get("contact");
-		String orderMail = (String)supplierMap.get("orderMail");
-		String questionMail = (String)supplierMap.get("questionMail");
-		String phone = (String)supplierMap.get("phone");
+		Supplier supplier = supplierService.getSupplier(Integer.parseInt(data.get("supplier").toString()));
 		
-		Supplier supplier = new Supplier(supplierId, supplierName, contact, orderMail, questionMail, phone);
+		if(newProduct) {
+			return new InventoryItem(barcode, deliveryTime, price, name, orderQuantity, currentStock, stockMinimum, supplier, attachment);
+		}
+		
 		return new InventoryItem(id, barcode, deliveryTime, price, name, orderQuantity, currentStock, stockMinimum, supplier, attachment);
 		
 		
