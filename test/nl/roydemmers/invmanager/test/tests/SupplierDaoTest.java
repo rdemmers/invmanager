@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import nl.roydemmers.invmanager.dao.InventoryDao;
 import nl.roydemmers.invmanager.dao.SupplierDao;
-import nl.roydemmers.invmanager.objects.InventoryItem;
+import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.Supplier;
 
 @ActiveProfiles("dev")

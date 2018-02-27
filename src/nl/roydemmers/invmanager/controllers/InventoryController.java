@@ -20,7 +20,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import nl.roydemmers.invmanager.constants.JspPage;
 import nl.roydemmers.invmanager.objects.EmailMessage;
-import nl.roydemmers.invmanager.objects.InventoryItem;
+import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.InventoryItemDoubleValue;
 import nl.roydemmers.invmanager.objects.InventoryLogItem;
 import nl.roydemmers.invmanager.objects.Supplier;
@@ -34,7 +34,7 @@ public class InventoryController extends AbstractController {
 	@RequestMapping(value = { "/inventoryitems", "/" })
 	public String showInventoryOverview(Model model) {
 
-		List<InventoryItem> allInventoryItems = inventoryService.getAllInventoryItems();
+		List<Product> allInventoryItems = inventoryService.getAllInventoryItems();
 
 		model.addAttribute("inventoryitem", allInventoryItems);
 		model.addAttribute("inventoryitembarcode", currentItem);
@@ -65,10 +65,10 @@ public class InventoryController extends AbstractController {
 
 		inventoryItemTemp.setSupplier(supplierService.getSupplier(Integer.parseInt(request.getParameter("supplierId"))));
 
-		InventoryItem inventoryItem = inventoryItemTemp.convertPriceToLong();
+		Product product = inventoryItemTemp.convertPriceToLong();
 
-		inventoryItem.setAttachment("");
-		inventoryService.create(inventoryItem);
+		product.setAttachment("");
+		inventoryService.create(product);
 
 		return JspPage.NEW_ITEM_SUCCES;
 	}
@@ -94,13 +94,13 @@ public class InventoryController extends AbstractController {
 
 		// Converts the item with a Double price value to an item with a long value, to prevent math errors
 		// Adds the ID, supplier and attachment from the database
-		InventoryItem inventoryItem = inventoryService.convertTempItemToFullObject(inventoryItemTemp, currentItem);
+		Product product = inventoryService.convertTempItemToFullObject(inventoryItemTemp, currentItem);
 		
 		String fileNameOnDisk = uploadService.uploadFileReturnFileName(fileUpload);
-		if(fileNameOnDisk != null){inventoryItem.setAttachment(fileNameOnDisk);}
+		if(fileNameOnDisk != null){product.setAttachment(fileNameOnDisk);}
 		
-		inventoryService.updateInventoryItem(inventoryItem);
-		inventoryService.checkStockForMail(inventoryItem.getId());
+		inventoryService.updateInventoryItem(product);
+		inventoryService.checkStockForMail(product.getId());
 
 		return JspPage.NEW_ITEM_SUCCES;
 	}
@@ -168,7 +168,7 @@ public class InventoryController extends AbstractController {
 		Map<Integer, Long> calculated = financialCalculationService.getSuppliersWithTotalWorth();
 		List<Supplier> allSuppliers = supplierService.convertSupplierHashmapToObjectList(calculated);
 
-		List<InventoryItem> lowItems = inventoryService.getLowInventoryItems();
+		List<Product> lowItems = inventoryService.getLowInventoryItems();
 		List<InventoryLogItem> recentChanges = inventoryService.getRecentChanges(true);
 
 		model.addAttribute("suppliers", allSuppliers);

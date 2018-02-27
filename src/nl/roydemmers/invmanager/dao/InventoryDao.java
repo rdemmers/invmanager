@@ -9,7 +9,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import nl.roydemmers.invmanager.objects.InventoryItem;
+import nl.roydemmers.invmanager.objects.Product;
 
 @Transactional
 @Component("inventoryDao")
@@ -17,20 +17,20 @@ public class InventoryDao extends AbstractDao {
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@SuppressWarnings("unchecked")
-	public List<InventoryItem> getInventoryList() {
+	public List<Product> getInventoryList() {
 		
-		return session().createQuery("from InventoryItem").list();
+		return session().createQuery("from Product").list();
 
 	}
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public void update(InventoryItem inventoryItem) {
-		session().update(inventoryItem);
+	public void update(Product product) {
+		session().update(product);
 	}
 
 	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
-	public void create(InventoryItem inventoryItem) {
-		session().save(inventoryItem);
+	public void create(Product product) {
+		session().save(product);
 
 	}
 
@@ -41,10 +41,10 @@ public class InventoryDao extends AbstractDao {
 	}
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public InventoryItem getInventoryItem(int id) {
-		Criteria crit = session().createCriteria(InventoryItem.class);
+	public Product getInventoryItem(int id) {
+		Criteria crit = session().createCriteria(Product.class);
 		crit.add(Restrictions.eq("id", id));
-		return (InventoryItem)crit.uniqueResult();
+		return (Product)crit.uniqueResult();
 	}
 
 

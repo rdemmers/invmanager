@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import nl.roydemmers.invmanager.objects.InventoryItem;
+import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.Supplier;
 
 @Controller
@@ -24,9 +24,9 @@ public class ApiController extends AbstractController{
 
 	@RequestMapping(value="/items", method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
-	public List<InventoryItem> getAllItems() {
+	public List<Product> getAllItems() {
 		
-		List<InventoryItem> items = inventoryService.getAllInventoryItems();
+		List<Product> items = inventoryService.getAllInventoryItems();
 		
 		
 		return items;
@@ -34,9 +34,9 @@ public class ApiController extends AbstractController{
 	
 	@RequestMapping(value="/items/low", method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
-	public List<InventoryItem> getLowItems() {
+	public List<Product> getLowItems() {
 		
-		List<InventoryItem> items = inventoryService.getLowInventoryItems();
+		List<Product> items = inventoryService.getLowInventoryItems();
 		
 		
 		return items;
@@ -44,26 +44,26 @@ public class ApiController extends AbstractController{
 	
 	@RequestMapping(value="/items/{id}", method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
-	public InventoryItem getSingleItem(@PathVariable("id") int id) {
+	public Product getSingleItem(@PathVariable("id") int id) {
 		
 		return inventoryService.getInventoryItem(id);
 	}
 	
 	@RequestMapping(value="/items/{id}", method=RequestMethod.POST, produces="application/json")
 	@ResponseBody
-	public InventoryItem updateItem(@PathVariable("id") int id, @RequestBody Map<String, Object> data) {
+	public Product updateItem(@PathVariable("id") int id, @RequestBody Map<String, Object> data) {
 		System.out.println(data);
-		InventoryItem inventoryItem = inventoryService.mapJsonToObject(data);
-		inventoryService.updateInventoryItem(inventoryItem);
+		Product product = inventoryService.mapJsonToObject(data);
+		inventoryService.updateInventoryItem(product);
 		return inventoryService.getInventoryItem(id);
 	}
 	
 	@RequestMapping(value="/items/new", method=RequestMethod.POST, produces="application/json")
 	@ResponseBody
-	public List<InventoryItem> createItem(@RequestBody Map<String, Object> data) {
-		System.out.println(data);
-		InventoryItem inventoryItem = inventoryService.mapJsonToObject(data);
-		inventoryService.create(inventoryItem);
+	public List<Product> createItem(@RequestBody Map<String, Object> data) {
+		
+		Product product = inventoryService.mapJsonToObject(data);
+		inventoryService.create(product);
 		return inventoryService.getAllInventoryItems();
 	}
 	

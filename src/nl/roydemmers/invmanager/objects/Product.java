@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="inventory")
-public class InventoryItem {
+public class Product {
 	@Id
 	@GeneratedValue
 	private int id;
@@ -37,9 +37,9 @@ public class InventoryItem {
 	@JoinColumn(name="supplierid")
 	private Supplier supplierId;
 
-	public InventoryItem() {}
+	public Product() {}
 
-	public InventoryItem(int id, String barcode, int deliveryTime, long price, String name, int orderQuantity,
+	public Product(int id, String barcode, int deliveryTime, long price, String name, int orderQuantity,
 			int currentStock, int stockMinimum, Supplier supplier, String attachment) {
 		this.id = id;
 		this.barcode = barcode;
@@ -53,7 +53,7 @@ public class InventoryItem {
 		this.attachment = attachment;
 	}
 	
-	public InventoryItem(String barcode, int deliveryTime, long price, String name, int orderQuantity,
+	public Product(String barcode, int deliveryTime, long price, String name, int orderQuantity,
 			int currentStock, int stockMinimum, Supplier supplier, String attachment) {
 		this.barcode = barcode;
 		this.deliveryTime = deliveryTime;
@@ -161,7 +161,7 @@ public class InventoryItem {
 
 	@Override
 	public String toString() {
-		return "InventoryItem [id=" + id + ", barcode=" + barcode + ", deliveryTime=" + deliveryTime + ", price="
+		return "Product [id=" + id + ", barcode=" + barcode + ", deliveryTime=" + deliveryTime + ", price="
 				+ price + ", name=" + name + ", orderQuantity=" + orderQuantity + ", currentStock=" + currentStock
 				+ ", stockMinimum=" + stockMinimum + ", supplier=" + supplierId + "]";
 	}

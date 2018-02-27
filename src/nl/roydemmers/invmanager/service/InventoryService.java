@@ -10,7 +10,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import nl.roydemmers.invmanager.dao.InventoryDao;
 import nl.roydemmers.invmanager.dao.InventoryLogItemDao;
-import nl.roydemmers.invmanager.objects.InventoryItem;
+import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.InventoryItemDoubleValue;
 import nl.roydemmers.invmanager.objects.InventoryLogItem;
 import nl.roydemmers.invmanager.objects.Supplier;
@@ -28,25 +28,25 @@ public class InventoryService {
 
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public List<InventoryItem> getAllInventoryItems() {
+	public List<Product> getAllInventoryItems() {
 		return inventoryDao.getInventoryList();
 	}
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public List<InventoryItem> getItemsWithAttachment(){
-		List<InventoryItem> inventoryItems = this.getAllInventoryItems();
-		List<InventoryItem> inventoryAttachments = new ArrayList<>();
+	public List<Product> getItemsWithAttachment(){
+		List<Product> products = this.getAllInventoryItems();
+		List<Product> inventoryAttachments = new ArrayList<>();
 		
-		for(InventoryItem inventoryItem : inventoryItems) {
-			if(inventoryItem.getAttachment().length() > 4) {
-				inventoryAttachments.add(inventoryItem);
+		for(Product product : products) {
+			if(product.getAttachment().length() > 4) {
+				inventoryAttachments.add(product);
 			}
 		}
 		
 		return inventoryAttachments;	
 	}
 	
-	public InventoryItem mapJsonToObject(Map<String,Object> data) {
+	public Product mapJsonToObject(Map<String,Object> data) {
 		// Check for an id in the map data
 		// an update to a product will have an ID, no id means that the product must be new
 		
@@ -67,22 +67,22 @@ public class InventoryService {
 		String attachment = (String)data.get("attachment");
 		
 		
-		Supplier supplier = supplierService.getSupplier(Integer.parseInt(data.get("supplier").toString()));
+		Supplier supplier = supplierService.getSupplier(Integer.parseInt(data.get("supplierId").toString()));
 		
 		if(newProduct) {
-			return new InventoryItem(barcode, deliveryTime, price, name, orderQuantity, currentStock, stockMinimum, supplier, attachment);
+			return new Product(barcode, deliveryTime, price, name, orderQuantity, currentStock, stockMinimum, supplier, attachment);
 		}
 		
-		return new InventoryItem(id, barcode, deliveryTime, price, name, orderQuantity, currentStock, stockMinimum, supplier, attachment);
+		return new Product(id, barcode, deliveryTime, price, name, orderQuantity, currentStock, stockMinimum, supplier, attachment);
 		
 		
 	}
 
 	// To display a List with items under the stock minimum
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public List<InventoryItem> getLowInventoryItems() {
-		List<InventoryItem> inventoryList = inventoryDao.getInventoryList();
-		List<InventoryItem> lowList = new ArrayList<>();
+	public List<Product> getLowInventoryItems() {
+		List<Product> inventoryList = inventoryDao.getInventoryList();
+		List<Product> lowList = new ArrayList<>();
 
 		for (int i = 0; i < inventoryList.size(); i++) {
 			if (inventoryList.get(i).getCurrentStock() <= inventoryList.get(i).getStockMinimum()) {
@@ -107,10 +107,10 @@ public class InventoryService {
 			}
 
 			for (InventoryLogItem inventoryLogItem : inventoryLogList) {
-				InventoryItem inventoryItem = this.getInventoryItem(inventoryLogItem.getItemID());
-				inventoryLogItem.setProductName(inventoryItem.getName());
+				Product product = this.getInventoryItem(inventoryLogItem.getItemID());
+				inventoryLogItem.setProductName(product.getName());
 				inventoryLogItem.setActualChange(inventoryLogItem.getNewQuantity() - inventoryLogItem.getOldQuantiy());
-				inventoryLogItem.setBarcode(inventoryItem.getBarcode());
+				inventoryLogItem.setBarcode(product.getBarcode());
 			}
 		} catch (NullPointerException e) {
 			System.out.println(e);
@@ -135,25 +135,25 @@ public class InventoryService {
 	}
 
 	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
-	public void create(InventoryItem inventoryItem) {
-		inventoryDao.create(inventoryItem);
+	public void create(Product product) {
+		inventoryDao.create(product);
 	}
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public InventoryItem getInventoryItem(int id) {
+	public Product getInventoryItem(int id) {
 		return inventoryDao.getInventoryItem(id);
 	}
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public void updateInventoryItem(InventoryItem inventoryItem) {
-		inventoryDao.update(inventoryItem);
+	public void updateInventoryItem(Product product) {
+		inventoryDao.update(product);
 	}
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void checkStockForMail(int id) {
-		InventoryItem inventoryItem = this.getInventoryItem(id);
-		if (inventoryItem.getCurrentStock() <= inventoryItem.getStockMinimum()) {
-			inventoryMailService.createNotificationMail(inventoryItem);
+		Product product = this.getInventoryItem(id);
+		if (product.getCurrentStock() <= product.getStockMinimum()) {
+			inventoryMailService.createNotificationMail(product);
 		}
 
 	}
@@ -161,12 +161,12 @@ public class InventoryService {
 	// Since log items aren't stored with all their properties this function appends the object
 	// with values from the database
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public void fillLogItemWithItemProps(InventoryLogItem logItem, InventoryItem inventoryItem) {
+	public void fillLogItemWithItemProps(InventoryLogItem logItem, Product product) {
 
-		logItem.setProductName(inventoryItem.getName());
-		logItem.setBarcode(inventoryItem.getBarcode());
-		logItem.setQuantityMinimum(inventoryItem.getStockMinimum());
-		logItem.setSupplier(inventoryItem.getSupplier().getName());
+		logItem.setProductName(product.getName());
+		logItem.setBarcode(product.getBarcode());
+		logItem.setQuantityMinimum(product.getStockMinimum());
+		logItem.setSupplier(product.getSupplier().getName());
 		if (logItem.getNewQuantity() < logItem.getQuantityMinimum()) {
 			logItem.setUnderMinimum(true);
 		} else {
@@ -176,13 +176,13 @@ public class InventoryService {
 	
 	// Used to circumvent issues with double values in money and makes it easier to manipulate objects through the front end.
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public InventoryItem convertTempItemToFullObject(InventoryItemDoubleValue inventoryItemTemp, InventoryItem currentItem) {
-		InventoryItem inventoryItem = inventoryItemTemp.convertPriceToLong();
+	public Product convertTempItemToFullObject(InventoryItemDoubleValue inventoryItemTemp, Product currentItem) {
+		Product product = inventoryItemTemp.convertPriceToLong();
 		
-		inventoryItem.setId(currentItem.getId());
-		inventoryItem.setSupplier(currentItem.getSupplier());
-		inventoryItem.setAttachment(currentItem.getAttachment());
+		product.setId(currentItem.getId());
+		product.setSupplier(currentItem.getSupplier());
+		product.setAttachment(currentItem.getAttachment());
 		
-		return inventoryItem;
+		return product;
 	}
 }

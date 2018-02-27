@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javassist.bytecode.Descriptor.Iterator;
 import nl.roydemmers.invmanager.constants.JspPage;
 import nl.roydemmers.invmanager.objects.GlobalPref;
-import nl.roydemmers.invmanager.objects.InventoryItem;
+import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.InventoryItemDoubleValue;
 import nl.roydemmers.invmanager.objects.Supplier;
 import nl.roydemmers.invmanager.objects.User;
@@ -168,7 +168,7 @@ public class AdminController extends AbstractController {
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value ="/admin/attachment")
 	public String showAttachments(Model model) {
-		List<InventoryItem> itemsWithAttachment = inventoryService.getItemsWithAttachment();
+		List<Product> itemsWithAttachment = inventoryService.getItemsWithAttachment();
 		System.out.println(itemsWithAttachment.toString());
 		model.addAttribute("attachmentList", itemsWithAttachment);
 		
@@ -179,9 +179,9 @@ public class AdminController extends AbstractController {
 	@RequestMapping(value = "/admin/deleteattachment", method = RequestMethod.POST)
 	public String deleteAttachment(Model model, HttpServletRequest request) {
 
-		InventoryItem inventoryItem = inventoryService.getInventoryItem(Integer.parseInt(request.getParameter("item_id")));
-		inventoryItem.setAttachment("");
-		inventoryService.updateInventoryItem(inventoryItem);
+		Product product = inventoryService.getInventoryItem(Integer.parseInt(request.getParameter("item_id")));
+		product.setAttachment("");
+		inventoryService.updateInventoryItem(product);
 		
 		return "attachment";
 	}

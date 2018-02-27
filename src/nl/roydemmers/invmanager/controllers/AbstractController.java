@@ -5,7 +5,7 @@ import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import nl.roydemmers.invmanager.dao.InventoryLogItemDao;
-import nl.roydemmers.invmanager.objects.InventoryItem;
+import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.service.FinancialCalculationService;
 import nl.roydemmers.invmanager.service.InventoryMailService;
 import nl.roydemmers.invmanager.service.InventoryService;
@@ -19,7 +19,7 @@ public class AbstractController {
 
 	protected InventoryService inventoryService;
 	protected FinancialCalculationService financialCalculationService;
-	protected InventoryItem currentItem;
+	protected Product currentItem;
 	protected SupplierService supplierService;
 	protected InventoryLogItemDao inventoryLogItemDao;
 	protected UserService userService;

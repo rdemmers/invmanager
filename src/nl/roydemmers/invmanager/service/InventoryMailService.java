@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import nl.roydemmers.invmanager.config.JavaBeanConfig;
 import nl.roydemmers.invmanager.objects.EmailMessage;
-import nl.roydemmers.invmanager.objects.InventoryItem;
+import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.Supplier;
 import nl.roydemmers.invmanager.objects.User;
 
@@ -48,31 +48,31 @@ public class InventoryMailService {
 
 	@Async
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public void createNotificationMail(InventoryItem inventoryItem) {
-		Supplier supplier = inventoryItem.getSupplier();
+	public void createNotificationMail(Product product) {
+		Supplier supplier = product.getSupplier();
 
 		String body = "";
 
 		body += "Het volgende product is onder het minimum gekomen:\n\n";
-		body += "Productnaam: " + inventoryItem.getName();
-		body += "\nProductcode: " + inventoryItem.getBarcode();
-		body += "\nHuidige Voorraad: " + inventoryItem.getCurrentStock();
-		body += "\nMinimum Voorraad: " + inventoryItem.getStockMinimum();
-		body += "\nPrijs: " + inventoryItem.getPrice();
-		body += "\n\nLeverancier: " + inventoryItem.getSupplier().getName();
+		body += "Productnaam: " + product.getName();
+		body += "\nProductcode: " + product.getBarcode();
+		body += "\nHuidige Voorraad: " + product.getCurrentStock();
+		body += "\nMinimum Voorraad: " + product.getStockMinimum();
+		body += "\nPrijs: " + product.getPrice();
+		body += "\n\nLeverancier: " + product.getSupplier().getName();
 		body += "\nContactpersoon: " + supplier.getContact();
 		body += "\nBestel Email: " + supplier.getOrderMail();
 		body += "\nVragen Email: " + supplier.getQuestionMail();
 		body += "\nTelefoonnummer: " + supplier.getPhone();
 		body += "\n\n\nBericht voor de leverancier:";
-		body += "\n\n" + inventoryItem.getBarcode();
-		body += "\t" + inventoryItem.getName();
-		body += "\t" + inventoryItem.getOrderQuantity();
-		body += " x " + financialCalculationService.convertLongtoCurrency(inventoryItem.getPrice());
+		body += "\n\n" + product.getBarcode();
+		body += "\t" + product.getName();
+		body += "\t" + product.getOrderQuantity();
+		body += " x " + financialCalculationService.convertLongtoCurrency(product.getPrice());
 
 		String target = preferenceService.getPreferenceValue("mailtarget");
-		String subject = "[INVENTORY-ERP][Minimum] Product: " + inventoryItem.getName();
-		String attachment = inventoryItem.getAttachment();
+		String subject = "[INVENTORY-ERP][Minimum] Product: " + product.getName();
+		String attachment = product.getAttachment();
 
 		this.sendMail(target, subject, body, attachment);
 

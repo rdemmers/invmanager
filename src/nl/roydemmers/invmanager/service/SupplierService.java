@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import nl.roydemmers.invmanager.dao.SupplierDao;
 import nl.roydemmers.invmanager.dao.UserDao;
-import nl.roydemmers.invmanager.objects.InventoryItem;
+import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.Supplier;
 import nl.roydemmers.invmanager.objects.User;
 

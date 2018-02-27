@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
-import nl.roydemmers.invmanager.objects.InventoryItem;
+import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.Supplier;
 
 // Service responsible for anything to do with money
@@ -25,11 +25,11 @@ public class FinancialCalculationService{
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public Map<Integer, Long> getSuppliersWithTotalWorth() {
 	
-		List<InventoryItem> inventoryItems = inventoryService.getAllInventoryItems();
+		List<Product> products = inventoryService.getAllInventoryItems();
 		Map<Integer, Long> temporaryMap = new HashMap<>();
 
 		
-		for (InventoryItem currentItem : inventoryItems) {
+		for (Product currentItem : products) {
 			long value = currentItem.getCurrentStock() * currentItem.getPrice();
 			
 			

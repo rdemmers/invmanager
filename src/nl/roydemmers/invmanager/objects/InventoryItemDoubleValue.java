@@ -35,10 +35,10 @@ public class InventoryItemDoubleValue {
 		}
 		
 		
-		public InventoryItem convertPriceToLong() {
+		public Product convertPriceToLong() {
 			
 			
-			InventoryItem conversion = new InventoryItem();
+			Product conversion = new Product();
 			
 			DecimalFormat df = new DecimalFormat("#.00"); 
 			String priceConversion = df.format(price);
@@ -136,7 +136,7 @@ public class InventoryItemDoubleValue {
 
 		@Override
 		public String toString() {
-			return "InventoryItem [id=" + id + ", barcode=" + barcode + ", deliveryTime=" + deliveryTime + ", price="
+			return "Product [id=" + id + ", barcode=" + barcode + ", deliveryTime=" + deliveryTime + ", price="
 					+ price + ", name=" + name + ", orderQuantity=" + orderQuantity + ", currentStock=" + currentStock
 					+ ", stockMinimum=" + stockMinimum + ", supplier=" + supplier + "]";
 		}
