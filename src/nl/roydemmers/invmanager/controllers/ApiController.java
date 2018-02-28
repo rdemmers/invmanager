@@ -1,9 +1,14 @@
 package nl.roydemmers.invmanager.controllers;
 
 import java.security.Principal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -80,5 +85,11 @@ public class ApiController extends AbstractController{
 	public Supplier getSuppliers(@PathVariable("id") int id) {
 		
 		return supplierService.getSupplier(id);
+	}
+	
+	@RequestMapping(value="/user", method=RequestMethod.GET, produces="application/json")
+	@ResponseBody
+	public Collection<? extends GrantedAuthority> getUser(Authentication authentication) {
+		return authentication.getAuthorities();
 	}
 }
