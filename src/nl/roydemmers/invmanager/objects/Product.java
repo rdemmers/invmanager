@@ -67,25 +67,6 @@ public class Product {
 	}
 	
 	
-	public InventoryItemDoubleValue convertPriceToDouble() {
-		InventoryItemDoubleValue conversion = new InventoryItemDoubleValue();
-		
-		double newPrice = this.price;
-		
-		newPrice /= 100;
-		
-		conversion.setBarcode(this.barcode);
-		conversion.setId(this.id);
-		conversion.setDeliveryTime(this.deliveryTime);
-		conversion.setPrice(newPrice);
-		conversion.setName(this.name);
-		conversion.setOrderQuantity(this.orderQuantity);
-		conversion.setCurrentStock(this.currentStock);
-		conversion.setStockMinimum(this.stockMinimum);
-		conversion.setSupplier(this.supplierId);
-		return conversion;
-		
-	}
 
 	public int getId() {
 		return id;

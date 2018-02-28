@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,15 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javassist.bytecode.Descriptor.Iterator;
-import nl.roydemmers.invmanager.constants.JspPage;
-import nl.roydemmers.invmanager.objects.GlobalPref;
 import nl.roydemmers.invmanager.objects.Product;
-import nl.roydemmers.invmanager.objects.InventoryItemDoubleValue;
 import nl.roydemmers.invmanager.objects.Supplier;
 import nl.roydemmers.invmanager.objects.User;
-import nl.roydemmers.invmanager.service.PreferenceService;
-import nl.roydemmers.invmanager.service.UserService;
 
 @Controller
 public class AdminController extends AbstractController {

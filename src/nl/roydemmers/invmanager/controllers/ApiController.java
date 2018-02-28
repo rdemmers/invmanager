@@ -66,8 +66,7 @@ public class ApiController extends AbstractController{
 		inventoryService.create(product);
 		return inventoryService.getAllInventoryItems();
 	}
-	
-	
+		
 	
 	@RequestMapping(value="/suppliers", method=RequestMethod.GET, produces="application/json")
 	@ResponseBody

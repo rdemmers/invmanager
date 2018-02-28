@@ -11,18 +11,13 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import nl.roydemmers.invmanager.constants.JspPage;
 import nl.roydemmers.invmanager.objects.EmailMessage;
-import nl.roydemmers.invmanager.objects.Product;
-import nl.roydemmers.invmanager.objects.InventoryItemDoubleValue;
 import nl.roydemmers.invmanager.objects.InventoryLogItem;
+import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.Supplier;
 import nl.roydemmers.invmanager.objects.User;
 
@@ -42,68 +37,9 @@ public class InventoryController extends AbstractController {
 		return JspPage.INVENTORY_OVERVIEW;
 	}
 
-	// Shows a form to create a new item
-	// Temporarily maps the item to a seperate object, needed to convert price
-	// double to a long
-	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
-	@RequestMapping("/createinventoryitem")
-	public String createNewInventoryItemForm(Model model) {
-		model.addAttribute("inventoryItemTemp", new InventoryItemDoubleValue());
-		model.addAttribute("suppliers", supplierService.getAllSuppliers());
-		return JspPage.NEW_ITEM_FORM;
-	}
+	
 
-	// Logic to add the item created in /createinventoryitem
-	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
-	@RequestMapping(value = "/docreate", method = RequestMethod.POST)
-	public String createNewInventoryItemPOST(Model model, @Valid InventoryItemDoubleValue inventoryItemTemp, BindingResult result, HttpServletRequest request) {
-
-		if (result.hasErrors()) {
-
-			return JspPage.NEW_ITEM_FORM;
-		}
-
-		inventoryItemTemp.setSupplier(supplierService.getSupplier(Integer.parseInt(request.getParameter("supplierId"))));
-
-		Product product = inventoryItemTemp.convertPriceToLong();
-
-		product.setAttachment("");
-		inventoryService.create(product);
-
-		return JspPage.NEW_ITEM_SUCCES;
-	}
-
-	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
-	@RequestMapping(value = "/edititem", method = RequestMethod.GET)
-	public String editItemForm(Model model, @RequestParam("id") int id) {
-
-		currentItem = inventoryService.getInventoryItem(id);
-		InventoryItemDoubleValue doubleItem = currentItem.convertPriceToDouble();
-		model.addAttribute("inventoryItemTemp", doubleItem);
-		return JspPage.EDIT_ITEM_FORM;
-	}
-
-	//Handles the logic for updating an item. Also adds an attachment if the attachment field isn't empty
-	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
-	@RequestMapping(value = "/doupdate", method = RequestMethod.POST)
-	public String editItemPOST(Model model, InventoryItemDoubleValue inventoryItemTemp, BindingResult result, @RequestParam CommonsMultipartFile[] fileUpload) {
-
-		if (result.hasErrors()) {
-			return JspPage.EDIT_ITEM_FORM;
-		}
-
-		// Converts the item with a Double price value to an item with a long value, to prevent math errors
-		// Adds the ID, supplier and attachment from the database
-		Product product = inventoryService.convertTempItemToFullObject(inventoryItemTemp, currentItem);
-		
-		String fileNameOnDisk = uploadService.uploadFileReturnFileName(fileUpload);
-		if(fileNameOnDisk != null){product.setAttachment(fileNameOnDisk);}
-		
-		inventoryService.updateInventoryItem(product);
-		inventoryService.checkStockForMail(product.getId());
-
-		return JspPage.NEW_ITEM_SUCCES;
-	}
+	
 
 	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/dodelete", method = RequestMethod.POST)

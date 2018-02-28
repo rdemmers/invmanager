@@ -8,11 +8,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
+
 import nl.roydemmers.invmanager.dao.InventoryDao;
 import nl.roydemmers.invmanager.dao.InventoryLogItemDao;
-import nl.roydemmers.invmanager.objects.Product;
-import nl.roydemmers.invmanager.objects.InventoryItemDoubleValue;
 import nl.roydemmers.invmanager.objects.InventoryLogItem;
+import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.Supplier;
 
 @Service("inventoryService")
@@ -174,15 +174,4 @@ public class InventoryService {
 		}
 	}
 	
-	// Used to circumvent issues with double values in money and makes it easier to manipulate objects through the front end.
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public Product convertTempItemToFullObject(InventoryItemDoubleValue inventoryItemTemp, Product currentItem) {
-		Product product = inventoryItemTemp.convertPriceToLong();
-		
-		product.setId(currentItem.getId());
-		product.setSupplier(currentItem.getSupplier());
-		product.setAttachment(currentItem.getAttachment());
-		
-		return product;
-	}
 }
