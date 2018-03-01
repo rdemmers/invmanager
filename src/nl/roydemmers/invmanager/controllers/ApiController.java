@@ -56,11 +56,23 @@ public class ApiController extends AbstractController{
 	
 	@RequestMapping(value="/items/{id}", method=RequestMethod.POST, produces="application/json")
 	@ResponseBody
-	public Product updateItem(@PathVariable("id") int id, @RequestBody Map<String, Object> data) {
+	public List<Product> updateItem(@PathVariable("id") int id, @RequestBody Map<String, Object> data) {
 		System.out.println(data);
 		Product product = inventoryService.mapJsonToObject(data);
 		inventoryService.updateInventoryItem(product);
-		return inventoryService.getInventoryItem(id);
+		return inventoryService.getAllInventoryItems();
+	}
+	
+	@RequestMapping(value="/items/{id}/mutate", method=RequestMethod.POST, produces="application/json")
+	@ResponseBody
+	public String mutateProduct(@PathVariable("id") int id, @RequestBody Map<String, Object> data) {
+		int currentStock = Integer.parseInt(data.get("currentStock").toString());
+		
+		Product product = inventoryService.getInventoryItem(id);
+		product.setCurrentStock(currentStock);
+		inventoryService.updateInventoryItem(product);
+		
+		return "success";
 	}
 	
 	@RequestMapping(value="/items/new", method=RequestMethod.POST, produces="application/json")
