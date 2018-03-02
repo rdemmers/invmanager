@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
@@ -61,6 +63,14 @@ public class ApiController extends AbstractController{
 		Product product = inventoryService.mapJsonToObject(data);
 		inventoryService.updateInventoryItem(product);
 		return inventoryService.getAllInventoryItems();
+	}
+	
+	@RequestMapping(value="/items/{id}", method=RequestMethod.DELETE, produces="application/json")
+	@ResponseBody
+	public String deleteProduct(@PathVariable("id") int id) {
+		
+		inventoryService.deleteInventoryItem(id);
+		return "success";
 	}
 	
 	@RequestMapping(value="/items/{id}/mutate", method=RequestMethod.POST, produces="application/json")
