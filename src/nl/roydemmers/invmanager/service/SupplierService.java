@@ -32,18 +32,18 @@ public class SupplierService{
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public Supplier getSupplier(int id) {
-		return supplierDao.getSupplier(id);
+		return supplierDao.get(id);
 		
 	}
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<Supplier> getAllSuppliers(){
-		return supplierDao.getAllSuppliers();
+		return supplierDao.getAll();
 	}
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void setSupplierWorth(int id, long worth) {
-		Supplier supplier = supplierDao.getSupplier(id);
+		Supplier supplier = supplierDao.get(id);
 		supplier.setTotalWorth(worth);
 		supplierDao.update(supplier);
 		

@@ -9,18 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
-import nl.roydemmers.invmanager.dao.InventoryDao;
-import nl.roydemmers.invmanager.dao.InventoryLogItemDao;
+import nl.roydemmers.invmanager.dao.ProductDao;
+import nl.roydemmers.invmanager.dao.ProductLogDao;
 import nl.roydemmers.invmanager.objects.InventoryLogItem;
 import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.Supplier;
 
-@Service("inventoryService")
-public class InventoryService {
+@Service("productService")
+public class ProductService {
 	@Autowired
-	private InventoryDao inventoryDao;
+	private ProductDao productDao;
 	@Autowired
-	private InventoryLogItemDao inventoryLogItemDao;
+	private ProductLogDao productLogDao;
 	@Autowired
 	private InventoryMailService inventoryMailService;
 	@Autowired
@@ -28,22 +28,22 @@ public class InventoryService {
 
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public List<Product> getAllInventoryItems() {
-		return inventoryDao.getInventoryList();
+	public List<Product> getAllProducts() {
+		return productDao.getAll();
 	}
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public List<Product> getItemsWithAttachment(){
-		List<Product> products = this.getAllInventoryItems();
-		List<Product> inventoryAttachments = new ArrayList<>();
+	public List<Product> getProductsWithAttachment(){
+		List<Product> products = this.getAllProducts();
+		List<Product> productsAttachments = new ArrayList<>();
 		
 		for(Product product : products) {
 			if(product.getAttachment().length() > 4) {
-				inventoryAttachments.add(product);
+				productsAttachments.add(product);
 			}
 		}
 		
-		return inventoryAttachments;	
+		return productsAttachments;	
 	}
 	
 	public Product mapJsonToObject(Map<String,Object> data) {
@@ -78,15 +78,16 @@ public class InventoryService {
 		
 	}
 
+	
 	// To display a List with items under the stock minimum
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public List<Product> getLowInventoryItems() {
-		List<Product> inventoryList = inventoryDao.getInventoryList();
+	public List<Product> getLowProducts() {
+		List<Product> productList = productDao.getAll();
 		List<Product> lowList = new ArrayList<>();
 
-		for (int i = 0; i < inventoryList.size(); i++) {
-			if (inventoryList.get(i).getCurrentStock() <= inventoryList.get(i).getStockMinimum()) {
-				lowList.add(inventoryList.get(i));
+		for (int i = 0; i < productList.size(); i++) {
+			if (productList.get(i).getCurrentStock() <= productList.get(i).getStockMinimum()) {
+				lowList.add(productList.get(i));
 			}
 		}
 		return lowList;
@@ -96,7 +97,7 @@ public class InventoryService {
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<InventoryLogItem> getRecentChanges(boolean getAll) {
 
-		List<InventoryLogItem> inventoryLogList = inventoryLogItemDao.getQuantityChangesHistory();
+		List<InventoryLogItem> inventoryLogList = productLogDao.getAll();
 
 		// Try - catch statement in case of an empty database
 		try {
@@ -131,22 +132,22 @@ public class InventoryService {
 
 	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	public void deleteInventoryItem(int id) {
-		inventoryDao.delete(id);
+		productDao.delete(id);
 	}
 
 	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	public void create(Product product) {
-		inventoryDao.create(product);
+		productDao.create(product);
 	}
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public Product getInventoryItem(int id) {
-		return inventoryDao.getInventoryItem(id);
+		return productDao.get(id);
 	}
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void updateInventoryItem(Product product) {
-		inventoryDao.update(product);
+		productDao.update(product);
 	}
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})

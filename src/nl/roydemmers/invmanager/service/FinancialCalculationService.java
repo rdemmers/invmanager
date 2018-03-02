@@ -18,14 +18,14 @@ import nl.roydemmers.invmanager.objects.Supplier;
 public class FinancialCalculationService{
 
 	@Autowired
-	private InventoryService inventoryService;
+	private ProductService productService;
 
 	// Returns a Map with <Supplier ID, Total worth as long>
 	// Used to display the total stock worth for each supplier
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public Map<Integer, Long> getSuppliersWithTotalWorth() {
 	
-		List<Product> products = inventoryService.getAllInventoryItems();
+		List<Product> products = productService.getAllProducts();
 		Map<Integer, Long> temporaryMap = new HashMap<>();
 
 		
@@ -43,14 +43,5 @@ public class FinancialCalculationService{
 		}
 		return temporaryMap;
 		
-	}
-
-	// Money only has to be displayed with decimal value in front end
-	// making it easier to convert the values only when needed by the view.
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public String convertLongtoCurrency(long amount) {
-		BigDecimal payment = new BigDecimal(amount).movePointLeft(2);
-
-		return ("€" + payment);
 	}
 }

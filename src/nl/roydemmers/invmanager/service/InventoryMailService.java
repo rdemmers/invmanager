@@ -68,7 +68,6 @@ public class InventoryMailService {
 		body += "\n\n" + product.getBarcode();
 		body += "\t" + product.getName();
 		body += "\t" + product.getOrderQuantity();
-		body += " x " + financialCalculationService.convertLongtoCurrency(product.getPrice());
 
 		String target = preferenceService.getPreferenceValue("mailtarget");
 		String subject = "[INVENTORY-ERP][Minimum] Product: " + product.getName();

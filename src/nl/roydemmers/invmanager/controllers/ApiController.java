@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.Supplier;
 
-@Controller
+@RestController
 @CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/api")
 public class ApiController extends AbstractController{
@@ -30,87 +32,70 @@ public class ApiController extends AbstractController{
 
 
 	@RequestMapping(value="/items", method=RequestMethod.GET, produces="application/json")
-	@ResponseBody
 	public List<Product> getAllItems() {
 		
-		List<Product> items = inventoryService.getAllInventoryItems();
-		
-		
-		return items;
+		return productService.getAllProducts();
 	}
 	
 	@RequestMapping(value="/items/low", method=RequestMethod.GET, produces="application/json")
-	@ResponseBody
 	public List<Product> getLowItems() {
 		
-		List<Product> items = inventoryService.getLowInventoryItems();
-		
-		
-		return items;
+		return productService.getLowProducts();
 	}
 	
 	@RequestMapping(value="/items/{id}", method=RequestMethod.GET, produces="application/json")
-	@ResponseBody
 	public Product getSingleItem(@PathVariable("id") int id) {
 		
-		return inventoryService.getInventoryItem(id);
+		return productService.getInventoryItem(id);
 	}
 	
 	@RequestMapping(value="/items/{id}", method=RequestMethod.POST, produces="application/json")
-	@ResponseBody
-	public List<Product> updateItem(@PathVariable("id") int id, @RequestBody Map<String, Object> data) {
-		System.out.println(data);
-		Product product = inventoryService.mapJsonToObject(data);
-		inventoryService.updateInventoryItem(product);
-		return inventoryService.getAllInventoryItems();
+	@ResponseStatus(value= HttpStatus.OK)
+	public void updateItem(@PathVariable("id") int id, @RequestBody Map<String, Object> data) {
+		Product product = productService.mapJsonToObject(data);
+		
+		productService.updateInventoryItem(product);
 	}
 	
 	@RequestMapping(value="/items/{id}", method=RequestMethod.DELETE, produces="application/json")
-	@ResponseBody
-	public String deleteProduct(@PathVariable("id") int id) {
+	@ResponseStatus(value= HttpStatus.OK)
+	public void deleteProduct(@PathVariable("id") int id) {
 		
-		inventoryService.deleteInventoryItem(id);
-		return "success";
+		productService.deleteInventoryItem(id);
 	}
 	
 	@RequestMapping(value="/items/{id}/mutate", method=RequestMethod.POST, produces="application/json")
-	@ResponseBody
-	public String mutateProduct(@PathVariable("id") int id, @RequestBody Map<String, Object> data) {
+	@ResponseStatus(value= HttpStatus.OK)
+	public void mutateProduct(@PathVariable("id") int id, @RequestBody Map<String, Object> data) {
 		int currentStock = Integer.parseInt(data.get("currentStock").toString());
 		
-		Product product = inventoryService.getInventoryItem(id);
+		Product product = productService.getInventoryItem(id);
 		product.setCurrentStock(currentStock);
-		inventoryService.updateInventoryItem(product);
-		
-		return "success";
+		productService.updateInventoryItem(product);
 	}
 	
 	@RequestMapping(value="/items/new", method=RequestMethod.POST, produces="application/json")
-	@ResponseBody
-	public List<Product> createItem(@RequestBody Map<String, Object> data) {
+	@ResponseStatus(value= HttpStatus.OK)
+	public void createItem(@RequestBody Map<String, Object> data) {
 		
-		Product product = inventoryService.mapJsonToObject(data);
-		inventoryService.create(product);
-		return inventoryService.getAllInventoryItems();
+		Product product = productService.mapJsonToObject(data);
+		productService.create(product);
 	}
 		
 	
 	@RequestMapping(value="/suppliers", method=RequestMethod.GET, produces="application/json")
-	@ResponseBody
 	public List<Supplier> getSuppliers() {
 		
 		return supplierService.getAllSuppliers();
 	}
 	
 	@RequestMapping(value="/suppliers/{id}", method=RequestMethod.GET, produces="application/json")
-	@ResponseBody
 	public Supplier getSuppliers(@PathVariable("id") int id) {
 		
 		return supplierService.getSupplier(id);
 	}
 	
 	@RequestMapping(value="/user", method=RequestMethod.GET, produces="application/json")
-	@ResponseBody
 	public Collection<? extends GrantedAuthority> getUser(Authentication authentication) {
 		return authentication.getAuthorities();
 	}

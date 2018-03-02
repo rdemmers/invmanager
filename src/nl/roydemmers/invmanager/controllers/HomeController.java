@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @Controller
-public class InventoryController extends AbstractController {
+public class HomeController extends AbstractController {
 
 	// Shows main inventorytable
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})

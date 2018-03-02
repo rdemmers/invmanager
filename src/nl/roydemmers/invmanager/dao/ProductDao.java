@@ -13,14 +13,12 @@ import nl.roydemmers.invmanager.objects.Product;
 
 @Transactional
 @Component("inventoryDao")
-public class InventoryDao extends AbstractDao {
+public class ProductDao extends AbstractDao {
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@SuppressWarnings("unchecked")
-	public List<Product> getInventoryList() {
-		
+	public List<Product> getAll() {
 		return session().createQuery("from Product").list();
-
 	}
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
@@ -41,12 +39,10 @@ public class InventoryDao extends AbstractDao {
 	}
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public Product getInventoryItem(int id) {
+	public Product get(int id) {
 		Criteria crit = session().createCriteria(Product.class);
 		crit.add(Restrictions.eq("id", id));
 		return (Product)crit.uniqueResult();
 	}
-
-
 
 }

@@ -17,7 +17,7 @@ public class SupplierDao extends AbstractDao {
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@SuppressWarnings("unchecked")
-	public List<Supplier> getAllSuppliers() {
+	public List<Supplier> getAll() {
 
 		return session().createQuery("from Supplier").list();
 
@@ -42,7 +42,7 @@ public class SupplierDao extends AbstractDao {
 	}
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public Supplier getSupplier(int id) {
+	public Supplier get(int id) {
 
 		Criteria crit = session().createCriteria(Supplier.class);
 		crit.add(Restrictions.eq("supplierId", id));

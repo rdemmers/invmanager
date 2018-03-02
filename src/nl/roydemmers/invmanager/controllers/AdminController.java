@@ -161,7 +161,7 @@ public class AdminController extends AbstractController {
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value ="/admin/attachment")
 	public String showAttachments(Model model) {
-		List<Product> itemsWithAttachment = inventoryService.getItemsWithAttachment();
+		List<Product> itemsWithAttachment = productService.getProductsWithAttachment();
 		System.out.println(itemsWithAttachment.toString());
 		model.addAttribute("attachmentList", itemsWithAttachment);
 		
@@ -172,9 +172,9 @@ public class AdminController extends AbstractController {
 	@RequestMapping(value = "/admin/deleteattachment", method = RequestMethod.POST)
 	public String deleteAttachment(Model model, HttpServletRequest request) {
 
-		Product product = inventoryService.getInventoryItem(Integer.parseInt(request.getParameter("item_id")));
+		Product product = productService.getInventoryItem(Integer.parseInt(request.getParameter("item_id")));
 		product.setAttachment("");
-		inventoryService.updateInventoryItem(product);
+		productService.updateInventoryItem(product);
 		
 		return "attachment";
 	}

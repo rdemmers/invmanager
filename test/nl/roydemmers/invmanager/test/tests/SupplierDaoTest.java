@@ -16,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import nl.roydemmers.invmanager.dao.InventoryDao;
+import nl.roydemmers.invmanager.dao.ProductDao;
 import nl.roydemmers.invmanager.dao.SupplierDao;
 import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.Supplier;
@@ -53,7 +53,7 @@ public class SupplierDaoTest {
 		supplierDao.create(supplier4);
 		supplierDao.create(supplier5);
 		
-		List<Supplier> suppliers = supplierDao.getAllSuppliers();
+		List<Supplier> suppliers = supplierDao.getAll();
 		
 		assertEquals("Number of suppliers should be 5", 5, suppliers.size());
 		assertEquals("Created supplier should be identical to retrieved supplier", supplier1, suppliers.get(0));
@@ -62,7 +62,7 @@ public class SupplierDaoTest {
 		supplierDao.delete("Supplier C");
 		supplierDao.delete("Supplier E");
 		
-		List<Supplier> suppliersDeleted = supplierDao.getAllSuppliers();
+		List<Supplier> suppliersDeleted = supplierDao.getAll();
 		
 		assertEquals("Number of suppliers should be 2 after deletion", 2, suppliersDeleted.size());
 		
@@ -72,7 +72,7 @@ public class SupplierDaoTest {
 		supplierDao.update(supplier1);
 		supplierDao.update(supplier5);
 		
-		List<Supplier> suppliersUpdated = supplierDao.getAllSuppliers();
+		List<Supplier> suppliersUpdated = supplierDao.getAll();
 		
 		assertEquals("Supplier1 hasn't properly updated in the database", supplier1.getName(), suppliersUpdated.get(0).getName());
 		assertEquals("Supplier6 hasn't properly updated in the database", supplier1.getOrderMail(), suppliersUpdated.get(1).getOrderMail());

@@ -4,11 +4,11 @@ import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import nl.roydemmers.invmanager.dao.InventoryLogItemDao;
+import nl.roydemmers.invmanager.dao.ProductLogDao;
 import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.service.FinancialCalculationService;
 import nl.roydemmers.invmanager.service.InventoryMailService;
-import nl.roydemmers.invmanager.service.InventoryService;
+import nl.roydemmers.invmanager.service.ProductService;
 import nl.roydemmers.invmanager.service.PreferenceService;
 import nl.roydemmers.invmanager.service.SupplierService;
 import nl.roydemmers.invmanager.service.UploadService;
@@ -17,11 +17,11 @@ import nl.roydemmers.invmanager.service.UserService;
 public class AbstractController {
 
 
-	protected InventoryService inventoryService;
+	protected ProductService productService;
 	protected FinancialCalculationService financialCalculationService;
 	protected Product currentItem;
 	protected SupplierService supplierService;
-	protected InventoryLogItemDao inventoryLogItemDao;
+	protected ProductLogDao productLogDao;
 	protected UserService userService;
 	protected PreferenceService preferenceService;
 	protected InventoryMailService inventoryMailService;
@@ -51,8 +51,8 @@ public class AbstractController {
 	}
 	
 	@Autowired
-	public void setInventoryLogItemDao(InventoryLogItemDao inventoryLogItemDao) {
-		this.inventoryLogItemDao = inventoryLogItemDao;
+	public void setInventoryLogItemDao(ProductLogDao productLogDao) {
+		this.productLogDao = productLogDao;
 	}
 
 	@Autowired
@@ -61,8 +61,8 @@ public class AbstractController {
 	}
 
 	@Autowired
-	public void setInventoryService(InventoryService inventoryService) {
-		this.inventoryService = inventoryService;
+	public void setInventoryService(ProductService productService) {
+		this.productService = productService;
 	}
 
 	@Autowired
