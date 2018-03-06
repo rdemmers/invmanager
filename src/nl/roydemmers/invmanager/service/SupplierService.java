@@ -31,13 +31,13 @@ public class SupplierService{
 	}
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public Supplier getSupplier(int id) {
+	public Supplier get(int id) {
 		return supplierDao.get(id);
 		
 	}
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public List<Supplier> getAllSuppliers(){
+	public List<Supplier> getAll(){
 		return supplierDao.getAll();
 	}
 	
@@ -59,7 +59,7 @@ public class SupplierService{
 			this.setSupplierWorth(pair.getKey(), pair.getValue());
 		}
 		
-		return this.getAllSuppliers();
+		return this.getAll();
 	}
 	
 	@Secured("ROLE_ADMIN")

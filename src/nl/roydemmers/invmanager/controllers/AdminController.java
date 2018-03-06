@@ -61,7 +61,7 @@ public class AdminController extends AbstractController {
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value ="/admin/suppliers")
 	public String showSupplierConfig(Model model) {
-		List<Supplier> supplierList = supplierService.getAllSuppliers();
+		List<Supplier> supplierList = supplierService.getAll();
 		model.addAttribute("supplierList", supplierList);
 		
 		return "suppliers";
@@ -71,7 +71,7 @@ public class AdminController extends AbstractController {
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/admin/supplierdatabasecall", method = RequestMethod.POST)
 	public String displayAdditionItemInformation(Model model, HttpServletRequest request) {
-		currentSupplier = supplierService.getSupplier(Integer.parseInt(request.getParameter("supplier_id")));
+		currentSupplier = supplierService.get(Integer.parseInt(request.getParameter("supplier_id")));
 		
 		model.addAttribute("currentSupplier", currentSupplier);
 
@@ -107,7 +107,7 @@ public class AdminController extends AbstractController {
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "admin/dodeletesupplier", method = RequestMethod.POST)
 	public String deleteSelectedSupplierPOST(Model model, HttpServletRequest request) {
-		currentSupplier = supplierService.getSupplier(Integer.parseInt(request.getParameter("supplier_id")));
+		currentSupplier = supplierService.get(Integer.parseInt(request.getParameter("supplier_id")));
 		supplierService.delete(currentSupplier);
 		return "suppliers";
 	}
@@ -172,9 +172,9 @@ public class AdminController extends AbstractController {
 	@RequestMapping(value = "/admin/deleteattachment", method = RequestMethod.POST)
 	public String deleteAttachment(Model model, HttpServletRequest request) {
 
-		Product product = productService.getInventoryItem(Integer.parseInt(request.getParameter("item_id")));
+		Product product = productService.get(Integer.parseInt(request.getParameter("item_id")));
 		product.setAttachment("");
-		productService.updateInventoryItem(product);
+		productService.update(product);
 		
 		return "attachment";
 	}

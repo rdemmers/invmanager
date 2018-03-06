@@ -68,7 +68,7 @@ public class ProductService {
 		String attachment = (String)data.get("attachment");
 		
 		
-		Supplier supplier = supplierService.getSupplier(Integer.parseInt(data.get("supplierId").toString()));
+		Supplier supplier = supplierService.get(Integer.parseInt(data.get("supplierId").toString()));
 		
 		if(newProduct) {
 			return new Product(barcode, description, deliveryTime, price, name, orderQuantity, currentStock, stockMinimum, attachment, supplier);
@@ -82,7 +82,7 @@ public class ProductService {
 	
 	// To display a List with items under the stock minimum
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public List<Product> getLowProducts() {
+	public List<Product> getLow() {
 		List<Product> productList = productDao.getAll();
 		List<Product> lowList = new ArrayList<>();
 
@@ -109,7 +109,7 @@ public class ProductService {
 			}
 
 			for (InventoryLogItem inventoryLogItem : inventoryLogList) {
-				Product product = this.getInventoryItem(inventoryLogItem.getItemID());
+				Product product = this.get(inventoryLogItem.getItemID());
 				inventoryLogItem.setProductName(product.getName());
 				inventoryLogItem.setActualChange(inventoryLogItem.getNewQuantity() - inventoryLogItem.getOldQuantiy());
 				inventoryLogItem.setBarcode(product.getBarcode());
@@ -132,7 +132,7 @@ public class ProductService {
 	}
 
 	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
-	public void deleteInventoryItem(int id) {
+	public void delete(int id) {
 		productDao.delete(id);
 	}
 
@@ -142,18 +142,18 @@ public class ProductService {
 	}
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public Product getInventoryItem(int id) {
+	public Product get(int id) {
 		return productDao.get(id);
 	}
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public void updateInventoryItem(Product product) {
+	public void update(Product product) {
 		productDao.update(product);
 	}
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void checkStockForMail(int id) {
-		Product product = this.getInventoryItem(id);
+		Product product = this.get(id);
 		if (product.getCurrentStock() <= product.getStockMinimum()) {
 			inventoryMailService.createNotificationMail(product);
 		}

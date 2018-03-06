@@ -34,7 +34,7 @@ public class ApiController extends AbstractController{
 	@RequestMapping(value="/test", method=RequestMethod.GET, produces="application/json")
 	public List<Product> test() {
 		
-		Product product = productService.getInventoryItem(1);
+		Product product = productService.get(1);
 		Order order = new Order(product, 5, false, "hoi");
 		
 		orderService.create(order);
@@ -44,13 +44,13 @@ public class ApiController extends AbstractController{
 	@RequestMapping(value="/items/low", method=RequestMethod.GET, produces="application/json")
 	public List<Product> getLowItems() {
 		
-		return productService.getLowProducts();
+		return productService.getLow();
 	}
 	
 	@RequestMapping(value="/items/{id}", method=RequestMethod.GET, produces="application/json")
 	public Product getSingleItem(@PathVariable("id") int id) {
 		
-		return productService.getInventoryItem(id);
+		return productService.get(id);
 	}
 	
 	@RequestMapping(value="/items/{id}", method=RequestMethod.POST, produces="application/json")
@@ -58,14 +58,14 @@ public class ApiController extends AbstractController{
 	public void updateItem(@PathVariable("id") int id, @RequestBody Map<String, Object> data) {
 		Product product = productService.mapJsonToObject(data);
 		
-		productService.updateInventoryItem(product);
+		productService.update(product);
 	}
 	
 	@RequestMapping(value="/items/{id}", method=RequestMethod.DELETE, produces="application/json")
 	@ResponseStatus(value= HttpStatus.OK)
 	public void deleteProduct(@PathVariable("id") int id) {
 		
-		productService.deleteInventoryItem(id);
+		productService.delete(id);
 	}
 	
 	@RequestMapping(value="/items/{id}/mutate", method=RequestMethod.POST, produces="application/json")
@@ -73,9 +73,9 @@ public class ApiController extends AbstractController{
 	public void mutateProduct(@PathVariable("id") int id, @RequestBody Map<String, Object> data) {
 		int currentStock = Integer.parseInt(data.get("currentStock").toString());
 		
-		Product product = productService.getInventoryItem(id);
+		Product product = productService.get(id);
 		product.setCurrentStock(currentStock);
-		productService.updateInventoryItem(product);
+		productService.update(product);
 	}
 	
 	@RequestMapping(value="/items/new", method=RequestMethod.POST, produces="application/json")
@@ -90,13 +90,13 @@ public class ApiController extends AbstractController{
 	@RequestMapping(value="/suppliers", method=RequestMethod.GET, produces="application/json")
 	public List<Supplier> getSuppliers() {
 		
-		return supplierService.getAllSuppliers();
+		return supplierService.getAll();
 	}
 	
 	@RequestMapping(value="/suppliers/{id}", method=RequestMethod.GET, produces="application/json")
 	public Supplier getSuppliers(@PathVariable("id") int id) {
 		
-		return supplierService.getSupplier(id);
+		return supplierService.get(id);
 	}
 	
 	@RequestMapping(value="/user", method=RequestMethod.GET, produces="application/json")
