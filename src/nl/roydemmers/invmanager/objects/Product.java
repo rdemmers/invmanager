@@ -18,6 +18,8 @@ public class Product {
 	private int id;
 	@Column(name="barcode")
 	private String barcode;
+	@Column(name="description")
+	private String description;
 	@Column(name="deliverytime")
 	private int deliveryTime;
 	@Column(name="price")
@@ -39,34 +41,47 @@ public class Product {
 
 	public Product() {}
 
-	public Product(int id, String barcode, int deliveryTime, long price, String name, int orderQuantity,
-			int currentStock, int stockMinimum, Supplier supplier, String attachment) {
+	
+	
+
+
+
+	public Product(int id, String barcode, String description, int deliveryTime, long price, @Size(min = 1, max = 199, message = "Productnaam mag niet leeg zijn en maximaal 199 tekens") String name,
+			int orderQuantity, int currentStock, int stockMinimum, String attachment, Supplier supplierId) {
+		super();
 		this.id = id;
 		this.barcode = barcode;
+		this.description = description;
 		this.deliveryTime = deliveryTime;
 		this.price = price;
 		this.name = name;
 		this.orderQuantity = orderQuantity;
 		this.currentStock = currentStock;
 		this.stockMinimum = stockMinimum;
-		this.supplierId = supplier;
 		this.attachment = attachment;
+		this.supplierId = supplierId;
 	}
-	
-	public Product(String barcode, int deliveryTime, long price, String name, int orderQuantity,
-			int currentStock, int stockMinimum, Supplier supplier, String attachment) {
+
+
+
+
+	public Product(String barcode, String description, int deliveryTime, long price, @Size(min = 1, max = 199, message = "Productnaam mag niet leeg zijn en maximaal 199 tekens") String name,
+			int orderQuantity, int currentStock, int stockMinimum, String attachment, Supplier supplierId) {
+		super();
 		this.barcode = barcode;
+		this.description = description;
 		this.deliveryTime = deliveryTime;
 		this.price = price;
 		this.name = name;
 		this.orderQuantity = orderQuantity;
 		this.currentStock = currentStock;
 		this.stockMinimum = stockMinimum;
-		this.supplierId = supplier;
 		this.attachment = attachment;
+		this.supplierId = supplierId;
 	}
-	
-	
+
+
+
 
 	public int getId() {
 		return id;
@@ -139,6 +154,34 @@ public class Product {
 	public void setSupplier(Supplier supplier) {
 		this.supplierId = supplier;
 	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+
+
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+
+
+
+	public Supplier getSupplierId() {
+		return supplierId;
+	}
+
+
+
+
+	public void setSupplierId(Supplier supplierId) {
+		this.supplierId = supplierId;
+	}
+
+
+
 
 	@Override
 	public String toString() {

@@ -58,6 +58,7 @@ public class ProductService {
 		}
 		
 		String barcode = (String)data.get("barcode");
+		String description = (String)data.get("description");
 		int deliveryTime = Integer.parseInt(data.get("deliveryTime").toString());
 		long price = Long.parseLong(data.get("price").toString());
 		String name = (String)data.get("name");
@@ -70,10 +71,10 @@ public class ProductService {
 		Supplier supplier = supplierService.getSupplier(Integer.parseInt(data.get("supplierId").toString()));
 		
 		if(newProduct) {
-			return new Product(barcode, deliveryTime, price, name, orderQuantity, currentStock, stockMinimum, supplier, attachment);
+			return new Product(barcode, description, deliveryTime, price, name, orderQuantity, currentStock, stockMinimum, attachment, supplier);
 		}
 		
-		return new Product(id, barcode, deliveryTime, price, name, orderQuantity, currentStock, stockMinimum, supplier, attachment);
+		return new Product(id, barcode, description, deliveryTime, price, name, orderQuantity, currentStock, stockMinimum, attachment, supplier);
 		
 		
 	}
