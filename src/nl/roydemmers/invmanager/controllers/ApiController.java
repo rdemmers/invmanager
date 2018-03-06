@@ -1,26 +1,21 @@
 package nl.roydemmers.invmanager.controllers;
 
-import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import nl.roydemmers.invmanager.objects.Order;
 import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.Supplier;
 
@@ -33,7 +28,16 @@ public class ApiController extends AbstractController{
 
 	@RequestMapping(value="/items", method=RequestMethod.GET, produces="application/json")
 	public List<Product> getAllItems() {
+		return productService.getAllProducts();
+	}
+	
+	@RequestMapping(value="/test", method=RequestMethod.GET, produces="application/json")
+	public List<Product> test() {
 		
+		Product product = productService.getInventoryItem(1);
+		Order order = new Order(product, 5, false, "hoi");
+		
+		orderService.create(order);
 		return productService.getAllProducts();
 	}
 	

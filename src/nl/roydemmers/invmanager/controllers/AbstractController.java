@@ -8,6 +8,7 @@ import nl.roydemmers.invmanager.dao.ProductLogDao;
 import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.service.FinancialCalculationService;
 import nl.roydemmers.invmanager.service.InventoryMailService;
+import nl.roydemmers.invmanager.service.OrderService;
 import nl.roydemmers.invmanager.service.ProductService;
 import nl.roydemmers.invmanager.service.PreferenceService;
 import nl.roydemmers.invmanager.service.SupplierService;
@@ -26,12 +27,19 @@ public class AbstractController {
 	protected PreferenceService preferenceService;
 	protected InventoryMailService inventoryMailService;
 	protected UploadService uploadService;
+	protected OrderService orderService;
 	
 	@Autowired
 	public void setUploadService(UploadService uploadService) {
 		this.uploadService = uploadService;
 	}
 	
+	@Autowired
+	public void setOrderService(OrderService orderService) {
+		this.orderService = orderService;
+	}
+
+
 	@Autowired
 	protected ServletContext servletContext;
 

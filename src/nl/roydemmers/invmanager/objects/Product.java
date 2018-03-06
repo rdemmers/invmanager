@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -38,6 +39,7 @@ public class Product {
 	@ManyToOne
 	@JoinColumn(name="supplierid")
 	private Supplier supplierId;
+	
 
 	public Product() {}
 
