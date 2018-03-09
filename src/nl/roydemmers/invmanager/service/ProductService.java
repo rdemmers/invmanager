@@ -83,15 +83,8 @@ public class ProductService {
 	// To display a List with items under the stock minimum
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<Product> getLow() {
-		List<Product> productList = productDao.getAll();
-		List<Product> lowList = new ArrayList<>();
-
-		for (int i = 0; i < productList.size(); i++) {
-			if (productList.get(i).getCurrentStock() <= productList.get(i).getStockMinimum()) {
-				lowList.add(productList.get(i));
-			}
-		}
-		return lowList;
+		
+		return productDao.getLow();
 	}
 
 	// Display the last x changes in inventory amount

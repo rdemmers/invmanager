@@ -3,6 +3,7 @@ package nl.roydemmers.invmanager.dao;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.security.access.annotation.Secured;
@@ -43,6 +44,12 @@ public class ProductDao extends AbstractDao {
 		Criteria crit = session().createCriteria(Product.class);
 		crit.add(Restrictions.eq("id", id));
 		return (Product)crit.uniqueResult();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Product> getLow(){
+		return session().createQuery("from Product where currentstock < stockminimum").list();
+		
 	}
 
 }
