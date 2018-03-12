@@ -26,10 +26,12 @@ public class Order {
 	private boolean received;
 	@Column(name="comments")
 	private String comments;
-	@Column(name="date")
-	@Transient
+	@Column(name="date", insertable = false, updatable = false)
 	private Date date;
 	
+	public Order() {
+		
+	}
 	
 	public Order(int id, Product productId, int quantityMultiplier, boolean received, String comments) {
 		super();
@@ -84,6 +86,11 @@ public class Order {
 
 	public Date getDate() {
 		return date;
+	}
+
+	@Override
+	public String toString() {
+		return "Order [id=" + id + ", productId=" + productId + ", quantityMultiplier=" + quantityMultiplier + ", received=" + received + ", comments=" + comments + ", date=" + date + "]";
 	}
 	
 	

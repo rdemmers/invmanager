@@ -18,6 +18,7 @@
 		<security:intercept-url pattern="/favicon.ico" access="permitAll" />
 
 		<security:intercept-url pattern="/api/**" access="permitAll" />
+		<security:intercept-url pattern="/orders" access="permitAll" />
 		
 		<!-- MISC -->
 		<security:intercept-url pattern="/loggedout" access="permitAll" />

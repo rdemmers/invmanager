@@ -22,85 +22,106 @@ import nl.roydemmers.invmanager.objects.Supplier;
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/api")
-public class ApiController extends AbstractController{
-	
+public class ApiController extends AbstractController {
 
-
-	@RequestMapping(value="/items", method=RequestMethod.GET, produces="application/json")
+	@RequestMapping(value = "/items", method = RequestMethod.GET, produces = "application/json")
 	public List<Product> getAllItems() {
 		return productService.getAllProducts();
 	}
-	
-	@RequestMapping(value="/test", method=RequestMethod.GET, produces="application/json")
+
+	@RequestMapping(value = "/test", method = RequestMethod.GET, produces = "application/json")
 	public List<Product> test() {
-		
+
 		Product product = productService.get(1);
 		Order order = new Order(product, 5, false, "hoi");
-		
+
 		orderService.create(order);
 		return productService.getAllProducts();
 	}
-	
-	@RequestMapping(value="/items/low", method=RequestMethod.GET, produces="application/json")
+
+	@RequestMapping(value = "/items/low", method = RequestMethod.GET, produces = "application/json")
 	public List<Product> getLowItems() {
-		
+
 		return productService.getLow();
 	}
-	
-	@RequestMapping(value="/items/{id}", method=RequestMethod.GET, produces="application/json")
+
+	@RequestMapping(value = "/items/{id}", method = RequestMethod.GET, produces = "application/json")
 	public Product getSingleItem(@PathVariable("id") int id) {
-		
+
 		return productService.get(id);
 	}
-	
-	@RequestMapping(value="/items/{id}", method=RequestMethod.POST, produces="application/json")
-	@ResponseStatus(value= HttpStatus.OK)
+
+	@RequestMapping(value = "/items/{id}", method = RequestMethod.POST, produces = "application/json")
+	@ResponseStatus(value = HttpStatus.OK)
 	public void updateItem(@PathVariable("id") int id, @RequestBody Map<String, Object> data) {
 		Product product = productService.mapJsonToObject(data);
-		
+
 		productService.update(product);
 	}
-	
-	@RequestMapping(value="/items/{id}", method=RequestMethod.DELETE, produces="application/json")
-	@ResponseStatus(value= HttpStatus.OK)
+
+	@RequestMapping(value = "/items/{id}", method = RequestMethod.DELETE, produces = "application/json")
+	@ResponseStatus(value = HttpStatus.OK)
 	public void deleteProduct(@PathVariable("id") int id) {
-		
+
 		productService.delete(id);
 	}
-	
-	@RequestMapping(value="/items/{id}/mutate", method=RequestMethod.POST, produces="application/json")
-	@ResponseStatus(value= HttpStatus.OK)
+
+	@RequestMapping(value = "/items/{id}/mutate", method = RequestMethod.POST, produces = "application/json")
+	@ResponseStatus(value = HttpStatus.OK)
 	public void mutateProduct(@PathVariable("id") int id, @RequestBody Map<String, Object> data) {
 		int currentStock = Integer.parseInt(data.get("currentStock").toString());
-		
+
 		Product product = productService.get(id);
 		product.setCurrentStock(currentStock);
 		productService.update(product);
 	}
-	
-	@RequestMapping(value="/items/new", method=RequestMethod.POST, produces="application/json")
-	@ResponseStatus(value= HttpStatus.OK)
+
+	@RequestMapping(value = "/items/new", method = RequestMethod.POST, produces = "application/json")
+	@ResponseStatus(value = HttpStatus.OK)
 	public void createItem(@RequestBody Map<String, Object> data) {
-		
+
 		Product product = productService.mapJsonToObject(data);
 		productService.create(product);
 	}
-		
-	
-	@RequestMapping(value="/suppliers", method=RequestMethod.GET, produces="application/json")
+
+	@RequestMapping(value = "/suppliers", method = RequestMethod.GET, produces = "application/json")
 	public List<Supplier> getSuppliers() {
-		
+
 		return supplierService.getAll();
 	}
-	
-	@RequestMapping(value="/suppliers/{id}", method=RequestMethod.GET, produces="application/json")
+
+	@RequestMapping(value = "/suppliers/{id}", method = RequestMethod.GET, produces = "application/json")
 	public Supplier getSuppliers(@PathVariable("id") int id) {
-		
+
 		return supplierService.get(id);
 	}
+
+	@RequestMapping(value = "/orders", method = RequestMethod.GET, produces = "application/json")
+	public List<Order> getOrders() {
+		System.out.println(orderService.get(1).toString());
+		return orderService.getAll();
+	}
 	
-	@RequestMapping(value="/user", method=RequestMethod.GET, produces="application/json")
+	@RequestMapping(value = "/orders/new", method = RequestMethod.POST, produces = "application/json")
+	public List<Order> newOrder(@RequestBody Map<String, Object> data) {
+		System.out.println(data);
+		
+		int id = Integer.parseInt(data.get("productId").toString());
+		int multiplier = Integer.parseInt(data.get("quantity").toString());
+		String comments = data.get("comments").toString();
+		
+		Product product = productService.get(id);
+		
+		Order order = new Order(product, multiplier, false, comments);
+		
+		orderService.create(order);
+		
+		return orderService.getAll();
+	}
+
+	@RequestMapping(value = "/user", method = RequestMethod.GET, produces = "application/json")
 	public Collection<? extends GrantedAuthority> getUser(Authentication authentication) {
 		return authentication.getAuthorities();
 	}
+
 }
