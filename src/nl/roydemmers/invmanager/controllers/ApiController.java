@@ -29,7 +29,7 @@ public class ApiController extends AbstractController {
 		return productService.getAllProducts();
 	}
 
-
+	// Return all products with currentStock < stockMinimum. Filters products that already have an open Order.
 	@RequestMapping(value = "/items/low", method = RequestMethod.GET, produces = "application/json")
 	public List<Product> getLowItems() {
 
@@ -41,7 +41,8 @@ public class ApiController extends AbstractController {
 
 		return productService.get(id);
 	}
-
+	
+	// Update a product based on id,
 	@RequestMapping(value = "/items/{id}", method = RequestMethod.POST, produces = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	public void updateItem(@PathVariable("id") int id, @RequestBody Map<String, Object> data) {
@@ -49,7 +50,8 @@ public class ApiController extends AbstractController {
 
 		productService.update(product);
 	}
-
+	
+	// product deletion 
 	@RequestMapping(value = "/items/{id}", method = RequestMethod.DELETE, produces = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	public void deleteProduct(@PathVariable("id") int id) {
@@ -57,6 +59,8 @@ public class ApiController extends AbstractController {
 		productService.delete(id);
 	}
 
+	// Mutate the currentStock of a product. This is a seperate mapping from .updateItem(), because all users can mutate
+	// while only mod/admin can update
 	@RequestMapping(value = "/items/{id}/mutate", method = RequestMethod.POST, produces = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	public void mutateProduct(@PathVariable("id") int id, @RequestBody Map<String, Object> data) {
@@ -108,7 +112,7 @@ public class ApiController extends AbstractController {
 		return orderService.getAll();
 	}
 	
-
+	// Grab authority of the logged in user, used to alter the front-end display.
 	@RequestMapping(value = "/user", method = RequestMethod.GET, produces = "application/json")
 	public Collection<? extends GrantedAuthority> getUser(Authentication authentication) {
 		return authentication.getAuthorities();
