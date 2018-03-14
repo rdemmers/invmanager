@@ -22,10 +22,10 @@ public class Order {
 	private Product productId;
 	@Column(name="quantity")
 	private int quantityMultiplier;
+	@Column(name="ordered")
+	private boolean ordered;
 	@Column(name="received")
 	private boolean received;
-	@Column(name="comments")
-	private String comments;
 	@Column(name="date", insertable = false, updatable = false)
 	private Date date;
 	
@@ -33,24 +33,39 @@ public class Order {
 		
 	}
 	
-	public Order(int id, Product productId, int quantityMultiplier, boolean received, String comments) {
+
+	
+
+	public Order(Product productId, int quantityMultiplier, boolean ordered, boolean received) {
+		super();
+		this.productId = productId;
+		this.quantityMultiplier = quantityMultiplier;
+		this.ordered = ordered;
+		this.received = received;
+	}
+
+
+
+
+	public Order(int id, Product productId, int quantityMultiplier, boolean ordered, boolean received) {
 		super();
 		this.id = id;
 		this.productId = productId;
 		this.quantityMultiplier = quantityMultiplier;
+		this.ordered = ordered;
 		this.received = received;
-		this.comments = comments;
-	}
-	
-	
-	public Order(Product productId, int quantityMultiplier, boolean received, String comments) {
-		super();
-		this.productId = productId;
-		this.quantityMultiplier = quantityMultiplier;
-		this.received = received;
-		this.comments = comments;
 	}
 
+
+
+
+	public boolean isOrdered() {
+		return ordered;
+	}
+
+	public void setOrdered(boolean ordered) {
+		this.ordered = ordered;
+	}
 
 	public int getId() {
 		return id;
@@ -76,12 +91,7 @@ public class Order {
 	public void setReceived(boolean received) {
 		this.received = received;
 	}
-	public String getComments() {
-		return comments;
-	}
-	public void setComments(String comments) {
-		this.comments = comments;
-	}
+	
 
 
 	public Date getDate() {
@@ -90,7 +100,7 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", productId=" + productId + ", quantityMultiplier=" + quantityMultiplier + ", received=" + received + ", comments=" + comments + ", date=" + date + "]";
+		return "Order [id=" + id + ", productId=" + productId + ", quantityMultiplier=" + quantityMultiplier + ", received=" + received + " date=" + date + "]";
 	}
 	
 	

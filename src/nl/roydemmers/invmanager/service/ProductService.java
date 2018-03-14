@@ -83,7 +83,6 @@ public class ProductService {
 	// To display a List with items under the stock minimum
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<Product> getLow() {
-		
 		return productDao.getLow();
 	}
 

@@ -29,15 +29,6 @@ public class ApiController extends AbstractController {
 		return productService.getAllProducts();
 	}
 
-	@RequestMapping(value = "/test", method = RequestMethod.GET, produces = "application/json")
-	public List<Product> test() {
-
-		Product product = productService.get(1);
-		Order order = new Order(product, 5, false, "hoi");
-
-		orderService.create(order);
-		return productService.getAllProducts();
-	}
 
 	@RequestMapping(value = "/items/low", method = RequestMethod.GET, produces = "application/json")
 	public List<Product> getLowItems() {
@@ -98,26 +89,25 @@ public class ApiController extends AbstractController {
 
 	@RequestMapping(value = "/orders", method = RequestMethod.GET, produces = "application/json")
 	public List<Order> getOrders() {
-		System.out.println(orderService.get(1).toString());
+		
 		return orderService.getAll();
 	}
 	
 	@RequestMapping(value = "/orders/new", method = RequestMethod.POST, produces = "application/json")
 	public List<Order> newOrder(@RequestBody Map<String, Object> data) {
-		System.out.println(data);
 		
 		int id = Integer.parseInt(data.get("productId").toString());
 		int multiplier = Integer.parseInt(data.get("quantity").toString());
-		String comments = data.get("comments").toString();
 		
 		Product product = productService.get(id);
 		
-		Order order = new Order(product, multiplier, false, comments);
+		Order order = new Order(product, multiplier, false, false);
 		
 		orderService.create(order);
 		
 		return orderService.getAll();
 	}
+	
 
 	@RequestMapping(value = "/user", method = RequestMethod.GET, produces = "application/json")
 	public Collection<? extends GrantedAuthority> getUser(Authentication authentication) {

@@ -11,12 +11,10 @@ public class DatabaseErrorHandler {
 	@ExceptionHandler(DataAccessException.class)
 	public String handleDatabaseException(DataAccessException ex) {
 		ex.printStackTrace();
+		
+		//TO-DO create proper exception handlers
 		return "error";
 	}
 	
-	@ExceptionHandler(AccessDeniedException.class)
-	public String AccessDeniedException(AccessDeniedException ex) {
-		ex.printStackTrace();
-		return "error";
-	}
+	
 }

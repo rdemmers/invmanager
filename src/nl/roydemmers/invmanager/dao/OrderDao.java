@@ -45,4 +45,5 @@ public class OrderDao extends AbstractDao {
 		return (Order)crit.uniqueResult();
 	}
 
+
 }
