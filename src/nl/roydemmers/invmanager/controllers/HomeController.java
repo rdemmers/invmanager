@@ -18,7 +18,7 @@ import nl.roydemmers.invmanager.objects.Product;
 @Controller
 public class HomeController extends AbstractController {
 
-	// Shows main inventorytable
+	// Makes sure that if someone directly browses to a route, that the react app gets loaded.
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = {"/", "/orders"})
 	public String showReactHome(HttpServletRequest request) {
