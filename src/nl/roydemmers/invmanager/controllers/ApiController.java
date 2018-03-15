@@ -97,6 +97,19 @@ public class ApiController extends AbstractController {
 		return orderService.getAll();
 	}
 	
+	@RequestMapping(value = "/orders/{id}", method = RequestMethod.POST, produces = "application/json")
+	public List<Order> setOrderReceived(@PathVariable("id") int id) {
+		Order order = orderService.get(id);
+		Product product = order.getProductId();
+		
+		product.setCurrentStock(product.getCurrentStock() + order.getQuantityMultiplier());
+		productService.update(product);
+		order.setReceived(true);
+		orderService.update(order);
+		
+		return orderService.getAll();
+	}
+	
 	@RequestMapping(value = "/orders/new", method = RequestMethod.POST, produces = "application/json")
 	public List<Order> newOrder(@RequestBody Map<String, Object> data) {
 		
