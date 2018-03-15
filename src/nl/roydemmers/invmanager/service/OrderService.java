@@ -19,6 +19,10 @@ public class OrderService {
 		return orderDao.getAll();
 	}
 	
+	public List<Order> getPending(){
+		return orderDao.getPendingToOrder();
+	}
+	
 
 	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	public void delete(int id) {

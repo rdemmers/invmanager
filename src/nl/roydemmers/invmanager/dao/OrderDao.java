@@ -20,6 +20,11 @@ public class OrderDao extends AbstractDao {
 	public List<Order> getAll() {
 		return session().createQuery("from Order").list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Order> getPendingToOrder() {
+		return session().createQuery("from Order o where o.ordered=false").list();
+	}
 
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void update(Order order) {

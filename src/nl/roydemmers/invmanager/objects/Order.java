@@ -98,10 +98,14 @@ public class Order {
 		return date;
 	}
 
+
+
+
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", productId=" + productId + ", quantityMultiplier=" + quantityMultiplier + ", received=" + received + " date=" + date + "]";
+		return "Order [id=" + id + ", productId=" + productId + ", quantityMultiplier=" + quantityMultiplier + ", ordered=" + ordered + ", received=" + received + ", date=" + date + "]";
 	}
+
 	
 	
 	

@@ -1,5 +1,7 @@
 package nl.roydemmers.invmanager.service;
 
+import java.util.List;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletContext;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import nl.roydemmers.invmanager.config.JavaBeanConfig;
 import nl.roydemmers.invmanager.objects.EmailMessage;
+import nl.roydemmers.invmanager.objects.Order;
 import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.Supplier;
 import nl.roydemmers.invmanager.objects.User;
@@ -112,4 +115,31 @@ public class InventoryMailService {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	public void createBatchOrderMail(List<Order> orderList) {
+		Supplier supplier = orderList.get(0).getProductId().getSupplier();
+
+		String body = "";
+
+		body += "Wij zouden graag de volgende producten willen bestellen:\n\n";
+		
+		for(Order o : orderList) {
+			Product product = o.getProductId();
+			
+			body += "Productnaam: " + product.getName();
+			body += "\nProductcode: " + product.getBarcode();
+			body += "\nHoeveelheid: " + o.getQuantityMultiplier();
+		}
+		
+		body += "\nMet vriendelijke groeten";
+
+		String target = "gibiguku@emailure.net";
+		String subject = "Bestelling voor " + supplier.getName();
+		String attachment = "";
+
+		this.sendMail(target, subject, body, attachment);
+
+	}
+	
 }
