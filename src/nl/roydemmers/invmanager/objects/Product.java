@@ -33,7 +33,7 @@ public class Product {
 	@Size(min = 1, max = 199, message = "Productnaam mag niet leeg zijn en maximaal 199 tekens")
 	private String name;
 	@Column(name = "orderquantity")
-	private int orderQuantity;
+	private String orderMetric;
 	@Column(name = "currentstock")
 	private int currentStock;
 	@Column(name = "stockminimum")
@@ -51,7 +51,7 @@ public class Product {
 	}
 
 	public Product(int id, String barcode, String description, int deliveryTime, long price, @Size(min = 1, max = 199, message = "Productnaam mag niet leeg zijn en maximaal 199 tekens") String name,
-			int orderQuantity, int currentStock, int stockMinimum, String attachment, Supplier supplierId, List<Order> orders) {
+			String orderQuantity, int currentStock, int stockMinimum, String attachment, Supplier supplierId, List<Order> orders) {
 		super();
 		this.id = id;
 		this.barcode = barcode;
@@ -59,7 +59,7 @@ public class Product {
 		this.deliveryTime = deliveryTime;
 		this.price = price;
 		this.name = name;
-		this.orderQuantity = orderQuantity;
+		this.orderMetric = orderQuantity;
 		this.currentStock = currentStock;
 		this.stockMinimum = stockMinimum;
 		this.attachment = attachment;
@@ -68,7 +68,7 @@ public class Product {
 	}
 
 	public Product(int id, String barcode, String description, int deliveryTime, long price, @Size(min = 1, max = 199, message = "Productnaam mag niet leeg zijn en maximaal 199 tekens") String name,
-			int orderQuantity, int currentStock, int stockMinimum, String attachment, Supplier supplierId) {
+			String orderQuantity, int currentStock, int stockMinimum, String attachment, Supplier supplierId) {
 		super();
 		this.id = id;
 		this.barcode = barcode;
@@ -76,7 +76,7 @@ public class Product {
 		this.deliveryTime = deliveryTime;
 		this.price = price;
 		this.name = name;
-		this.orderQuantity = orderQuantity;
+		this.orderMetric = orderQuantity;
 		this.currentStock = currentStock;
 		this.stockMinimum = stockMinimum;
 		this.attachment = attachment;
@@ -84,14 +84,14 @@ public class Product {
 	}
 
 	public Product(String barcode, String description, int deliveryTime, long price, @Size(min = 1, max = 199, message = "Productnaam mag niet leeg zijn en maximaal 199 tekens") String name,
-			int orderQuantity, int currentStock, int stockMinimum, String attachment, Supplier supplierId) {
+			String orderQuantity, int currentStock, int stockMinimum, String attachment, Supplier supplierId) {
 		super();
 		this.barcode = barcode;
 		this.description = description;
 		this.deliveryTime = deliveryTime;
 		this.price = price;
 		this.name = name;
-		this.orderQuantity = orderQuantity;
+		this.orderMetric = orderQuantity;
 		this.currentStock = currentStock;
 		this.stockMinimum = stockMinimum;
 		this.attachment = attachment;
@@ -138,12 +138,12 @@ public class Product {
 		this.name = name;
 	}
 
-	public int getOrderQuantity() {
-		return orderQuantity;
+	public String getOrderMetric() {
+		return orderMetric;
 	}
 
-	public void setOrderQuantity(int orderQuantity) {
-		this.orderQuantity = orderQuantity;
+	public void setOrderMetric(String orderQuantity) {
+		this.orderMetric = orderQuantity;
 	}
 
 	public int getCurrentStock() {
@@ -180,7 +180,7 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", barcode=" + barcode + ", deliveryTime=" + deliveryTime + ", price=" + price + ", name=" + name + ", orderQuantity=" + orderQuantity + ", currentStock="
+		return "Product [id=" + id + ", barcode=" + barcode + ", deliveryTime=" + deliveryTime + ", price=" + price + ", name=" + name + ", orderMetric=" + orderMetric + ", currentStock="
 				+ currentStock + ", stockMinimum=" + stockMinimum + ", supplier=" + supplierId + "]";
 	}
 

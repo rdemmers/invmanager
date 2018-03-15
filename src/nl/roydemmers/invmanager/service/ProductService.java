@@ -62,7 +62,7 @@ public class ProductService {
 		int deliveryTime = Integer.parseInt(data.get("deliveryTime").toString());
 		long price = Long.parseLong(data.get("price").toString());
 		String name = (String)data.get("name");
-		int orderQuantity = Integer.parseInt(data.get("orderQuantity").toString());
+		String orderMetric = data.get("orderMetric").toString();
 		int currentStock = Integer.parseInt(data.get("currentStock").toString());
 		int stockMinimum = Integer.parseInt(data.get("stockMinimum").toString());
 		String attachment = (String)data.get("attachment");
@@ -71,10 +71,10 @@ public class ProductService {
 		Supplier supplier = supplierService.get(Integer.parseInt(data.get("supplierId").toString()));
 		
 		if(newProduct) {
-			return new Product(barcode, description, deliveryTime, price, name, orderQuantity, currentStock, stockMinimum, attachment, supplier);
+			return new Product(barcode, description, deliveryTime, price, name, orderMetric, currentStock, stockMinimum, attachment, supplier);
 		}
 		
-		return new Product(id, barcode, description, deliveryTime, price, name, orderQuantity, currentStock, stockMinimum, attachment, supplier);
+		return new Product(id, barcode, description, deliveryTime, price, name, orderMetric, currentStock, stockMinimum, attachment, supplier);
 		
 		
 	}

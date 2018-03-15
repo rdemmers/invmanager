@@ -70,7 +70,7 @@ public class InventoryMailService {
 		body += "\n\n\nBericht voor de leverancier:";
 		body += "\n\n" + product.getBarcode();
 		body += "\t" + product.getName();
-		body += "\t" + product.getOrderQuantity();
+		body += "\t" + product.getOrderMetric();
 
 		String target = preferenceService.getPreferenceValue("mailtarget");
 		String subject = "[INVENTORY-ERP][Minimum] Product: " + product.getName();
