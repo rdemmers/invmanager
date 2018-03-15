@@ -115,7 +115,6 @@ public class ApiController extends AbstractController {
 		Product product = productService.get(id);
 		
 		Order order = new Order(product, multiplier, false, false);
-		
 		orderService.create(order);
 		
 		return orderService.getAll();

@@ -15,6 +15,12 @@ import nl.roydemmers.invmanager.objects.InventoryLogItem;
 import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.Supplier;
 
+/**Service to manipulate Projects and communicate with the ProductDao
+ * 
+ * @see nl.roydemmers.invmanager.dao.ProductDao
+ * @author Roy Demmers
+ *
+ */
 @Service("productService")
 public class ProductService {
 	@Autowired
@@ -27,11 +33,21 @@ public class ProductService {
 	private SupplierService supplierService;
 
 
+	/**Get all Products from the database
+	 * 
+	 * @return Returns a List<Product>
+	 */
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<Product> getAllProducts() {
 		return productDao.getAll();
 	}
 	
+	/**Generate a list of products, filter out the products without attachments
+	 * 
+	 * 
+	 * @return List<Product> that have attachments
+	 */
+	//TODO Move this logic from java to an HQL query
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<Product> getProductsWithAttachment(){
 		List<Product> products = this.getAllProducts();
@@ -46,6 +62,13 @@ public class ProductService {
 		return productsAttachments;	
 	}
 	
+	/**Takes a map of JSON data and maps it to a Product Object.
+	 * 
+	 * If the JSON data contains no productID, the method will generate a new product
+	 * 
+	 * @param data The JSON product information that should be mapped
+	 * @return returns a Product object
+	 */
 	public Product mapJsonToObject(Map<String,Object> data) {
 		// Check for an id in the map data
 		// an update to a product will have an ID, no id means that the product must be new
@@ -80,13 +103,24 @@ public class ProductService {
 	}
 
 	
-	// To display a List with items under the stock minimum
+	
+	/**Fetch a list with Products that have currentStock < stockMinimum
+	 * 
+	 * @return Returns a list<Product> with products that have less stock than their minimum
+	 */
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<Product> getLow() {
 		return productDao.getLow();
 	}
 
-	// Display the last x changes in inventory amount
+	
+	/**Get recent changes to the product database. Currently not being used.
+	 * 
+	 * @param getAll True: diplay all changes, False: display only last 20 changes
+	 * 
+	 * @return Returns a list with inventoryLogItems
+	 * @deprecated
+	 */
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<InventoryLogItem> getRecentChanges(boolean getAll) {
 
@@ -113,6 +147,13 @@ public class ProductService {
 		return inventoryLogList;
 	}
 
+	/**Shorten an inventoryLogList to the supplied length
+	 * 
+	 * @param inventoryLogList List that should be shortened
+	 * @param listLength Wanted length of the list
+	 * 
+	 * @return Shortened inventoryLogList
+	 */
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<InventoryLogItem> shortenInventoryLogList(List<InventoryLogItem> inventoryLogList, int listLength) {
 
@@ -123,26 +164,44 @@ public class ProductService {
 		return inventoryLogList;
 	}
 
+	/**Delete a product from the database
+	 * @param id ID of the product
+	 */
 	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	public void delete(int id) {
 		productDao.delete(id);
 	}
 
+	/**Create a product in the database
+	 * @param product Product to be created
+	 */
 	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	public void create(Product product) {
 		productDao.create(product);
 	}
 
+	/**Fetch a specific Product from the database
+	 * @param id ID of the Product that should be fetched
+	 * @return Product object
+	 */
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public Product get(int id) {
 		return productDao.get(id);
 	}
 
+	/**Update the values of a Product in the database
+	 * @param product Product that overwrites its old version in the database
+	 */
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void update(Product product) {
 		productDao.update(product);
 	}
 
+	/** Check if the currentStock of a product is lower than the minimumstock, send a notificationmail
+	 * if it is
+	 * @param id ID of the product that should be checked
+	 * @deprecated Currently not being used since notificationmails are not being send.
+	 */
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void checkStockForMail(int id) {
 		Product product = this.get(id);
@@ -152,20 +211,5 @@ public class ProductService {
 
 	}
 
-	// Since log items aren't stored with all their properties this function appends the object
-	// with values from the database
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public void fillLogItemWithItemProps(InventoryLogItem logItem, Product product) {
-
-		logItem.setProductName(product.getName());
-		logItem.setBarcode(product.getBarcode());
-		logItem.setQuantityMinimum(product.getStockMinimum());
-		logItem.setSupplier(product.getSupplier().getName());
-		if (logItem.getNewQuantity() < logItem.getQuantityMinimum()) {
-			logItem.setUnderMinimum(true);
-		} else {
-			logItem.setUnderMinimum(false);
-		}
-	}
 	
 }

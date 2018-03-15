@@ -21,6 +21,10 @@ import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.Supplier;
 import nl.roydemmers.invmanager.objects.User;
 
+/**
+ * @author Roy Demmers
+ *
+ */
 @Service("inventoryMailService")
 public class InventoryMailService {
 	@Autowired
@@ -32,6 +36,11 @@ public class InventoryMailService {
 	@Autowired
 	protected ServletContext context;
 
+	/** Sends an email with specified text to the owner of the application
+	 * 
+	 * @param emailMessage Text that should be mailed
+	 * @param user User responsable for sending the issue
+	 */
 	@Async
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void createIssueEmail(EmailMessage emailMessage, User user) {
@@ -43,12 +52,18 @@ public class InventoryMailService {
 		body += "\n" + user.getAuthority();
 
 		String subject = "Issue report: " + user.getUsername();
-		String target = "chibitenshin@gmail.com";
+		String target = "foo@bar.com";
 
 		this.sendMail(target, subject, body, "");
 		
 	}
 
+	/**Create a notifcation about a product having a lower stock than the minimum.
+	 * 
+	 * Currently not being used
+	 * 
+	 * @param product Product that should be included in the e-mail
+	 */
 	@Async
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void createNotificationMail(Product product) {
@@ -80,6 +95,11 @@ public class InventoryMailService {
 
 	}
 	
+	/**Add an attachment to the Message
+	 * 
+	 * @param attachment String reference to the attachment
+	 * @param helper Mimemessage target for the attachment
+	 */
 	@Async
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void appendAttachment(String attachment, MimeMessageHelper helper) {
@@ -94,6 +114,14 @@ public class InventoryMailService {
 		}
 	}
 
+	/**Send an e-mail from the adress set in the database
+	 * @see nl.roydemmers.invmanager.config.JavaBeanConfig
+	 * 
+	 * @param target Target mail adress 
+	 * @param subject	Subject of the mail
+	 * @param body Body of the mail
+	 * @param attachment String reference to the attachment
+	 */
 	@Async
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void sendMail(String target, String subject, String body, String attachment) {
@@ -117,6 +145,10 @@ public class InventoryMailService {
 	}
 	
 	
+	/**Takes a List<Order> and creates an e-mail with the orders to the supplier
+	 * 
+	 * @param orderList List of orders that should be sent to the supplier
+	 */
 	public void createBatchOrderMail(List<Order> orderList) {
 		Supplier supplier = orderList.get(0).getProductId().getSupplier();
 
