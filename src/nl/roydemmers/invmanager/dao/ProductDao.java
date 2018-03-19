@@ -48,7 +48,7 @@ public class ProductDao extends AbstractDao {
 	
 	@SuppressWarnings("unchecked")
 	public List<Product> getLow(){
-		return session().createQuery("from Product p left outer join p.orders o where p.currentStock < p.stockMinimum and (p.orders is empty)").list();	
+		return session().createQuery("from Product p left outer join p.orders o where p.currentStock < p.stockMinimum and (p.orders is empty or o.received is true)").list();	
 	}
 	
 
