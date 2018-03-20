@@ -50,52 +50,20 @@ public class Product {
 	public Product() {
 	}
 
-	public Product(int id, String barcode, String description, int deliveryTime, long price, @Size(min = 1, max = 199, message = "Productnaam mag niet leeg zijn en maximaal 199 tekens") String name,
-			String orderQuantity, int currentStock, int stockMinimum, String attachment, Supplier supplierId, List<Order> orders) {
+	public Product(Builder builder) {
 		super();
-		this.id = id;
-		this.barcode = barcode;
-		this.description = description;
-		this.deliveryTime = deliveryTime;
-		this.price = price;
-		this.name = name;
-		this.orderMetric = orderQuantity;
-		this.currentStock = currentStock;
-		this.stockMinimum = stockMinimum;
-		this.attachment = attachment;
-		this.supplierId = supplierId;
-		this.orders = orders;
-	}
-
-	public Product(int id, String barcode, String description, int deliveryTime, long price, @Size(min = 1, max = 199, message = "Productnaam mag niet leeg zijn en maximaal 199 tekens") String name,
-			String orderQuantity, int currentStock, int stockMinimum, String attachment, Supplier supplierId) {
-		super();
-		this.id = id;
-		this.barcode = barcode;
-		this.description = description;
-		this.deliveryTime = deliveryTime;
-		this.price = price;
-		this.name = name;
-		this.orderMetric = orderQuantity;
-		this.currentStock = currentStock;
-		this.stockMinimum = stockMinimum;
-		this.attachment = attachment;
-		this.supplierId = supplierId;
-	}
-
-	public Product(String barcode, String description, int deliveryTime, long price, @Size(min = 1, max = 199, message = "Productnaam mag niet leeg zijn en maximaal 199 tekens") String name,
-			String orderQuantity, int currentStock, int stockMinimum, String attachment, Supplier supplierId) {
-		super();
-		this.barcode = barcode;
-		this.description = description;
-		this.deliveryTime = deliveryTime;
-		this.price = price;
-		this.name = name;
-		this.orderMetric = orderQuantity;
-		this.currentStock = currentStock;
-		this.stockMinimum = stockMinimum;
-		this.attachment = attachment;
-		this.supplierId = supplierId;
+		this.id = builder.id;
+		this.barcode = builder.barcode;
+		this.description = builder.description;
+		this.deliveryTime = builder.deliveryTime;
+		this.price = builder.price;
+		this.name = builder.name;
+		this.orderMetric = builder.orderMetric;
+		this.currentStock = builder.currentStock;
+		this.stockMinimum = builder.stockMinimum;
+		this.attachment = builder.attachment;
+		this.supplierId = builder.supplierId;
+		this.orders = builder.orders;
 	}
 
 	public int getId() {
@@ -178,12 +146,6 @@ public class Product {
 		this.description = description;
 	}
 
-	@Override
-	public String toString() {
-		return "Product [id=" + id + ", barcode=" + barcode + ", deliveryTime=" + deliveryTime + ", price=" + price + ", name=" + name + ", orderMetric=" + orderMetric + ", currentStock="
-				+ currentStock + ", stockMinimum=" + stockMinimum + ", supplier=" + supplierId + "]";
-	}
-
 	public String getAttachment() {
 		return attachment;
 	}
@@ -198,6 +160,78 @@ public class Product {
 
 	public void setOrders(List<Order> orders) {
 		this.orders = orders;
+	}
+
+	public static class Builder {
+		private final String barcode;
+		private final String name;
+		private final Supplier supplierId;
+		
+		private int id;
+				
+		private String description;
+		private int deliveryTime = 0;
+		private long price = 0;
+		private String orderMetric = "";
+		private int currentStock = 0;
+		private int stockMinimum = 0;
+		private String attachment = "";
+		private List<Order> orders;
+		
+		public Builder(String barcode, String name, Supplier supplier) {
+			this.barcode = barcode;
+			this.name = name;
+			this.supplierId = supplier;
+		}
+		
+		public Builder id(int id) {
+			this.id = id;
+			return this;
+		}
+		
+		public Builder description(String description) {
+			this.description = description;
+			return this;
+		}
+		
+		public Builder deliveryTime(int deliveryTime) {
+			this.deliveryTime = deliveryTime;
+			return this;
+		}
+		
+		public Builder price(long price) {
+			this.price = price;
+			return this;
+		}
+		
+		public Builder orderMetric(String orderMetric) {
+			this.orderMetric = orderMetric;
+			return this;
+		}
+		
+		public Builder currentStock(int currentStock) {
+			this.currentStock = currentStock;
+			return this;
+		}
+		
+		public Builder stockMinimum(int stockMinimum) {
+			this.stockMinimum = stockMinimum;
+			return this;
+		}
+		
+		public Builder attachment(String attachment) {
+			this.attachment = attachment;
+			return this;
+		}
+		public Builder orders(List<Order> orders) {
+			this.orders = orders;
+			return this;
+		}
+		
+		
+		public Product build() {
+			return new Product(this);
+		}
 	}
 
 }

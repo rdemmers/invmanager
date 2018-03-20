@@ -94,10 +94,10 @@ public class ProductService {
 		Supplier supplier = supplierService.get(Integer.parseInt(data.get("supplierId").toString()));
 		
 		if(newProduct) {
-			return new Product(barcode, description, deliveryTime, price, name, orderMetric, currentStock, stockMinimum, attachment, supplier);
+			return new Product.Builder(barcode, name, supplier).description(description).deliveryTime(deliveryTime).price(price).orderMetric(orderMetric).currentStock(currentStock).stockMinimum(stockMinimum).attachment(attachment).build();
 		}
 		
-		return new Product(id, barcode, description, deliveryTime, price, name, orderMetric, currentStock, stockMinimum, attachment, supplier);
+		return new Product.Builder(barcode, name, supplier).id(id).description(description).deliveryTime(deliveryTime).price(price).orderMetric(orderMetric).currentStock(currentStock).stockMinimum(stockMinimum).attachment(attachment).build();
 		
 		
 	}

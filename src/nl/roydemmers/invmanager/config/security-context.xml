@@ -12,6 +12,7 @@
 			<security:password-encoder ref="passwordEncoder"></security:password-encoder>
 		</security:authentication-provider>
 	</security:authentication-manager>
+	
 	<!-- Role Hierarchy: Admin access = hasAnyRole('ROLE_ADMIN') Mod accesss = hasAnyRole('ROLE_ADMIN', 'ROLE_MOD') User access = isAuthenticated(); -->
 	<security:http use-expressions="true">
 		<security:intercept-url pattern="/" access="isAuthenticated()" />
