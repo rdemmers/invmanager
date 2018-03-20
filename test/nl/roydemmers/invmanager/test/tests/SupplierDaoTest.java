@@ -1,10 +1,5 @@
 package nl.roydemmers.invmanager.test.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-
 import javax.sql.DataSource;
 
 import org.junit.Before;
@@ -16,10 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import nl.roydemmers.invmanager.dao.ProductDao;
 import nl.roydemmers.invmanager.dao.SupplierDao;
-import nl.roydemmers.invmanager.objects.Product;
-import nl.roydemmers.invmanager.objects.Supplier;
 
 @ActiveProfiles("dev")
 @ContextConfiguration(locations = { "classpath:nl/roydemmers/invmanager/config/dao-context.xml", "classpath:nl/roydemmers/invmanager/config/security-context.xml",
