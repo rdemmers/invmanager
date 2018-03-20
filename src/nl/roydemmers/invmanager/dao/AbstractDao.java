@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import nl.roydemmers.invmanager.service.InventoryMailService;
 
 @Transactional
-public abstract class AbstractDao {
+abstract class AbstractDao {
 
 	protected NamedParameterJdbcTemplate jdbc;
 	

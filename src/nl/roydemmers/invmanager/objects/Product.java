@@ -50,7 +50,7 @@ public class Product {
 	public Product() {
 	}
 
-	public Product(Builder builder) {
+	private Product(Builder builder) {
 		super();
 		this.id = builder.id;
 		this.barcode = builder.barcode;

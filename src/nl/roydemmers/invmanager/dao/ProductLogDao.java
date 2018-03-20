@@ -20,13 +20,6 @@ public class ProductLogDao extends AbstractDao{
 		return session().createQuery("from InventoryLogItem").list();	
 	}
 	
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public void appendUsernameToLogItem(String username) {	
-		InventoryLogItem inventoryLogItem = (InventoryLogItem)session().createQuery("from InventoryLogItem ORDER BY id DESC").setMaxResults(1).uniqueResult();
-		
-		inventoryLogItem.setUsername(username);
-		session().update(inventoryLogItem);
-	}
 	
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public InventoryLogItem getLast() {

@@ -15,7 +15,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import nl.roydemmers.invmanager.config.JavaBeanConfig;
-import nl.roydemmers.invmanager.objects.EmailMessage;
 import nl.roydemmers.invmanager.objects.Order;
 import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.Supplier;
@@ -30,8 +29,6 @@ public class InventoryMailService {
 	@Autowired
 	private JavaBeanConfig javaBeanConfig;
 	@Autowired
-	private FinancialCalculationService financialCalculationService;
-	@Autowired
 	protected PreferenceService preferenceService;
 	@Autowired
 	protected ServletContext context;
@@ -43,9 +40,9 @@ public class InventoryMailService {
 	 */
 	@Async
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public void createIssueEmail(EmailMessage emailMessage, User user) {
+	public void createIssueEmail(String emailMessage, User user) {
 
-		String body = emailMessage.getMailBody();
+		String body = emailMessage;
 
 		body += "\n\n" + user.getUsername();
 		body += "\n" + user.getEmail();
