@@ -20,7 +20,7 @@ public class HomeController extends AbstractController {
 
 	// Makes sure that if someone directly browses to a route, that the react app gets loaded.
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	@RequestMapping(value = {"/", "/orders"})
+	@RequestMapping(value = {"/", "/orders", "/suppliers"})
 	public String showReactHome(HttpServletRequest request) {
 
 		
