@@ -25,13 +25,13 @@ import nl.roydemmers.invmanager.objects.User;
  *
  */
 @Service("inventoryMailService")
-public class InventoryMailService {
+class InventoryMailService {
 	@Autowired
 	private JavaBeanConfig javaBeanConfig;
 	@Autowired
-	protected PreferenceService preferenceService;
+	private PreferenceService preferenceService;
 	@Autowired
-	protected ServletContext context;
+	private ServletContext context;
 
 	/** Sends an email with specified text to the owner of the application
 	 * 
@@ -99,7 +99,7 @@ public class InventoryMailService {
 	 */
 	@Async
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public void appendAttachment(String attachment, MimeMessageHelper helper) {
+	private void appendAttachment(String attachment, MimeMessageHelper helper) {
 		if (attachment != null) {
 			FileSystemResource file = new FileSystemResource(context.getRealPath("/WEB-INF/attachments/") + "/" + attachment);
 			try {
@@ -121,7 +121,7 @@ public class InventoryMailService {
 	 */
 	@Async
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public void sendMail(String target, String subject, String body, String attachment) {
+	private void sendMail(String target, String subject, String body, String attachment) {
 
 		JavaMailSender mailSender = javaBeanConfig.getJavaMailSender(preferenceService);
 		MimeMessage message = mailSender.createMimeMessage();

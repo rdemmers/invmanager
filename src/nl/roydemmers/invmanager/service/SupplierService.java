@@ -61,7 +61,7 @@ public class SupplierService{
 	 * @param worth The long value of the total worth
 	 */
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public void setSupplierWorth(int id, long worth) {
+	private void setSupplierWorth(int id, long worth) {
 		Supplier supplier = supplierDao.get(id);
 		supplier.setTotalWorth(worth);
 		supplierDao.update(supplier);

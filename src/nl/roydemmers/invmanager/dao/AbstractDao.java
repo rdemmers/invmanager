@@ -9,8 +9,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import nl.roydemmers.invmanager.service.InventoryMailService;
-
 @Transactional
 abstract class AbstractDao {
 

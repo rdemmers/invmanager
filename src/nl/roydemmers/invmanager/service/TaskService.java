@@ -1,16 +1,12 @@
 package nl.roydemmers.invmanager.service;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.stereotype.Service;
 
 import nl.roydemmers.invmanager.objects.Order;
@@ -39,12 +35,12 @@ public class TaskService {
 		for(Supplier s : allSuppliers) {
 			List<Order> list = new LinkedList<>();
 			
-			supplierMap.put(s.getId(), list);
+			supplierMap.put(s.getSupplierId(), list);
 		}
 		
 		// Sorts the orders by supplier into the proper List 
 		for(int i = 0; i < currentOrders.size(); i++) {
-			int supplierId = currentOrders.get(i).getProductId().getSupplier().getId();
+			int supplierId = currentOrders.get(i).getProductId().getSupplier().getSupplierId();
 			List<Order> temporaryList = supplierMap.get(supplierId);
 			temporaryList.add(currentOrders.get(i));
 			

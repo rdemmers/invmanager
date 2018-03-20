@@ -113,39 +113,6 @@ public class ProductService {
 		return productDao.getLow();
 	}
 
-	
-	/**Get recent changes to the product database. Currently not being used.
-	 * 
-	 * @param getAll True: diplay all changes, False: display only last 20 changes
-	 * 
-	 * @return Returns a list with inventoryLogItems
-	 * @deprecated
-	 */
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public List<InventoryLogItem> getRecentChanges(boolean getAll) {
-
-		List<InventoryLogItem> inventoryLogList = productLogDao.getAll();
-
-		// Try - catch statement in case of an empty database
-		try {
-			Collections.reverse(inventoryLogList);
-			
-			if (!getAll) {
-				this.shortenInventoryLogList(inventoryLogList, 19);
-			}
-
-			for (InventoryLogItem inventoryLogItem : inventoryLogList) {
-				Product product = this.get(inventoryLogItem.getItemID());
-				inventoryLogItem.setProductName(product.getName());
-				inventoryLogItem.setActualChange(inventoryLogItem.getNewQuantity() - inventoryLogItem.getOldQuantiy());
-				inventoryLogItem.setBarcode(product.getBarcode());
-			}
-		} catch (NullPointerException e) {
-			System.out.println(e);
-		}
-
-		return inventoryLogList;
-	}
 
 	/**Shorten an inventoryLogList to the supplied length
 	 * 
@@ -155,7 +122,7 @@ public class ProductService {
 	 * @return Shortened inventoryLogList
 	 */
 	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public List<InventoryLogItem> shortenInventoryLogList(List<InventoryLogItem> inventoryLogList, int listLength) {
+	private List<InventoryLogItem> shortenInventoryLogList(List<InventoryLogItem> inventoryLogList, int listLength) {
 
 		if (inventoryLogList.size() > listLength) {
 			inventoryLogList = inventoryLogList.subList(0, listLength);

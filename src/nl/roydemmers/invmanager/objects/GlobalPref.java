@@ -19,13 +19,6 @@ public class GlobalPref {
 	public GlobalPref() {
 		
 	}
-	
-	public GlobalPref(String name, String value, String group) {
-		super();
-		this.name = name;
-		this.value = value;
-		this.group = group;
-	}
 
 	public String getName() {
 		return name;

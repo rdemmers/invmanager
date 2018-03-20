@@ -2,7 +2,6 @@ package nl.roydemmers.invmanager.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import nl.roydemmers.invmanager.service.FinancialCalculationService;
 import nl.roydemmers.invmanager.service.OrderService;
 import nl.roydemmers.invmanager.service.ProductService;
 import nl.roydemmers.invmanager.service.SupplierService;
@@ -11,7 +10,6 @@ class AbstractController {
 	
 
 	protected ProductService productService;
-	protected FinancialCalculationService financialCalculationService;
 	protected SupplierService supplierService;
 	protected OrderService orderService;
 	
@@ -32,8 +30,4 @@ class AbstractController {
 		this.productService = productService;
 	}
 
-	@Autowired
-	public void setFinancialCalculationService(FinancialCalculationService financialCalculationService) {
-		this.financialCalculationService = financialCalculationService;
-	}
 }

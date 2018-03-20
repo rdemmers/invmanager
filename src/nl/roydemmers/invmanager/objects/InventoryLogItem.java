@@ -43,13 +43,7 @@ public class InventoryLogItem {
 		
 	}
 	
-	public InventoryLogItem(int itemID, int oldQuantiy, int newQuantity, Date timeStamp) {
-		super();
-		this.itemID = itemID;
-		this.oldQuantiy = oldQuantiy;
-		this.newQuantity = newQuantity;
-		this.timeStamp = timeStamp;
-	}
+	
 	
 	
 	
