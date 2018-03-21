@@ -1,10 +1,14 @@
 package nl.roydemmers.invmanager.objects;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import nl.roydemmers.invmanager.objects.Product.Builder;
 
 @Entity
 @Table(name = "suppliers")
@@ -30,6 +34,20 @@ public class Supplier {
 	public Supplier() {
 
 	}
+	
+	
+
+	private Supplier(Builder builder) {
+		super();
+		this.supplierId = builder.supplierId;
+		this.name = builder.name;
+		this.contact = builder.contact;
+		this.orderMail = builder.orderMail;
+		this.questionMail = builder.questionMail;
+		this.phone = builder.phone;
+		this.totalWorth = builder.totalWorth;
+	}
+
 
 
 	public String getName() {
@@ -88,5 +106,49 @@ public class Supplier {
 		this.supplierId = supplierId;
 	}
 
-	
+	public static class Builder {
+		private final String name;
+		private final String orderMail;
+
+		private int supplierId;
+		private String contact;
+		
+		private String questionMail;
+		private String phone;
+		private Long totalWorth;
+
+		public Builder(String name, String orderMail) {
+			this.name = name;
+			this.orderMail = orderMail;
+		}
+
+		public Builder supplierId(int supplierId) {
+			this.supplierId = supplierId;
+			return this;
+		}
+		
+		public Builder contact(String contact) {
+			this.contact = contact;
+			return this;
+		}
+		
+		public Builder questionMail(String questionMail) {
+			this.questionMail = questionMail;
+			return this;
+		}
+		
+		public Builder phone(String phone) {
+			this.phone = phone;
+			return this;
+		}
+		
+		public Builder totalWorth(long totalWorth) {
+			this.totalWorth = totalWorth;
+			return this;
+		}
+
+		public Supplier build() {
+			return new Supplier(this);
+		}
+	}
 }
