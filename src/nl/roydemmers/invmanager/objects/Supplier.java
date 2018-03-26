@@ -1,14 +1,10 @@
 package nl.roydemmers.invmanager.objects;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import nl.roydemmers.invmanager.objects.Product.Builder;
 
 @Entity
 @Table(name = "suppliers")
@@ -151,4 +147,12 @@ public class Supplier {
 			return new Supplier(this);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "Supplier [supplierId=" + supplierId + ", name=" + name + ", contact=" + contact + ", orderMail=" + orderMail + ", questionMail=" + questionMail + ", phone=" + phone + ", totalWorth="
+				+ totalWorth + "]";
+	}
+	
+	
 }

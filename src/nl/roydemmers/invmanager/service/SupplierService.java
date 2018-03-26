@@ -8,6 +8,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import nl.roydemmers.invmanager.dao.SupplierDao;
+import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.Supplier;
 /**Service to manipulate Projects and communicate with the ProductDao
  * 
@@ -68,18 +69,33 @@ public class SupplierService{
 		
 	}
 	
-	// Used to easily access the supplier list front end
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
-	public List<Supplier> convertSupplierHashmapToObjectList(Map<Integer,Long> map){
-		Iterator<Map.Entry<Integer, Long>> it = map.entrySet().iterator();
-		while(it.hasNext()) {
-			Map.Entry<Integer, Long> pair = it.next();
-			
-			this.setSupplierWorth(pair.getKey(), pair.getValue());
+	public Supplier mapJsonToObject(Map<String,Object> data) {
+		// Check for an id in the map data
+		// an update to a product will have an ID, no id means that the product must be new
+		
+		boolean newSupplier = true;
+		int supplierId = 0;
+		if(data.get("supplierId") != null) {
+			supplierId = (Integer)data.get("supplierId");
+			newSupplier = false;
 		}
 		
-		return this.getAll();
+		String name = (String)data.get("name");
+		String contact = (String)data.get("contact");
+		String orderMail = (String)data.get("orderMail");
+		String questionMail = (String)data.get("questionMail");
+		String phone = (String)data.get("phone");
+		
+		
+		if(newSupplier) {
+			return new Supplier.Builder(name, orderMail).contact(contact).questionMail(questionMail).phone(phone).build();
+		}
+		
+		return new Supplier.Builder(name, orderMail).contact(contact).questionMail(questionMail).phone(phone).supplierId(supplierId).build();
+		
+		
 	}
+
 	
 	@Secured("ROLE_ADMIN")
 	public void update(Supplier supplier) {

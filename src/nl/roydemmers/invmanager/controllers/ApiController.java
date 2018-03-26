@@ -84,6 +84,13 @@ public class ApiController extends AbstractController {
 
 		return supplierService.getAll();
 	}
+	
+	@RequestMapping(value = "/suppliers/new", method = RequestMethod.POST, produces = "application/json")
+	@ResponseStatus(value = HttpStatus.OK)
+	public void createSupplier(@RequestBody Map<String, Object> data) {
+		supplierService.create(supplierService.mapJsonToObject(data));
+		
+	}
 
 	@RequestMapping(value = "/suppliers/{id}", method = RequestMethod.GET, produces = "application/json")
 	public Supplier getSuppliers(@PathVariable("id") int id) {
