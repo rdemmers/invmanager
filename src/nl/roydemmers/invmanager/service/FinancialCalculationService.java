@@ -27,7 +27,6 @@ public class FinancialCalculationService{
 	 * 
 	 * @return Returns a HashMap with a supplierID as Key and the total monetary value of all products associated with that supplier as Value.
 	 */
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public Map<Integer, Long> getSuppliersWithTotalWorth() {
 	
 		List<Product> products = productService.getAllProducts();

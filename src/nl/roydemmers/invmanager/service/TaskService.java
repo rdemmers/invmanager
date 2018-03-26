@@ -27,6 +27,8 @@ public class TaskService {
 	@Scheduled(cron="1 * * * * 1-5")
 	public void generateOrderMails() {
 		
+		
+		
 		// Fetch list of all orders and suppliers
 		List<Order> currentOrders = orderService.getPending();
 		List<Supplier> allSuppliers = supplierService.getAll();

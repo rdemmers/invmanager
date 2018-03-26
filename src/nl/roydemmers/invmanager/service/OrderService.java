@@ -25,7 +25,6 @@ public class OrderService {
 	 * 
 	 * @return Returns a List<Order> with all orders from the database
 	 */
-	@Secured({ "ROLE_USER", "ROLE_ADMIN", "ROLE_MOD" })
 	public List<Order> getAll() {
 		return orderDao.getAll();
 	}
@@ -59,7 +58,6 @@ public class OrderService {
 	 * 
 	 * @param id Id of the Order that has to be removed
 	 */
-	@Secured({ "ROLE_ADMIN", "ROLE_MOD" })
 	public void delete(int id) {
 		orderDao.delete(id);
 	}
@@ -69,7 +67,6 @@ public class OrderService {
 	 * 
 	 * @param order Order to be added to the database
 	 */
-	@Secured({ "ROLE_ADMIN", "ROLE_MOD" })
 	public void create(Order order) {
 		orderDao.create(order);
 	}
@@ -80,7 +77,6 @@ public class OrderService {
 	 * @param id ID of the order that has to be fetched from the database
 	 * @return Order object
 	 */
-	@Secured({ "ROLE_USER", "ROLE_ADMIN", "ROLE_MOD" })
 	public Order get(int id) {
 		return orderDao.get(id);
 	}
@@ -91,7 +87,6 @@ public class OrderService {
 	 * 
 	 * @param order Order that will be updated in the database
 	 */
-	@Secured({ "ROLE_USER", "ROLE_ADMIN", "ROLE_MOD" })
 	public void update(Order order) {
 		orderDao.update(order);
 	}

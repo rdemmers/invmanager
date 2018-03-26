@@ -36,7 +36,6 @@ public class ProductService {
 	 * 
 	 * @return Returns a List<Product>
 	 */
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<Product> getAllProducts() {
 		return productDao.getAll();
 	}
@@ -47,7 +46,6 @@ public class ProductService {
 	 * @return List<Product> that have attachments
 	 */
 	//TODO Move this logic from java to an HQL query
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<Product> getProductsWithAttachment(){
 		List<Product> products = this.getAllProducts();
 		List<Product> productsAttachments = new ArrayList<>();
@@ -107,7 +105,6 @@ public class ProductService {
 	 * 
 	 * @return Returns a list<Product> with products that have less stock than their minimum
 	 */
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<Product> getLow() {
 		return productDao.getLow();
 	}
@@ -120,7 +117,6 @@ public class ProductService {
 	 * 
 	 * @return Shortened inventoryLogList
 	 */
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	private List<InventoryLogItem> shortenInventoryLogList(List<InventoryLogItem> inventoryLogList, int listLength) {
 
 		if (inventoryLogList.size() > listLength) {
@@ -133,7 +129,6 @@ public class ProductService {
 	/**Delete a product from the database
 	 * @param id ID of the product
 	 */
-	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	public void delete(int id) {
 		productDao.delete(id);
 	}
@@ -141,7 +136,6 @@ public class ProductService {
 	/**Create a product in the database
 	 * @param product Product to be created
 	 */
-	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	public void create(Product product) {
 		productDao.create(product);
 	}
@@ -150,7 +144,6 @@ public class ProductService {
 	 * @param id ID of the Product that should be fetched
 	 * @return Product object
 	 */
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public Product get(int id) {
 		return productDao.get(id);
 	}
@@ -158,7 +151,6 @@ public class ProductService {
 	/**Update the values of a Product in the database
 	 * @param product Product that overwrites its old version in the database
 	 */
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void update(Product product) {
 		productDao.update(product);
 	}
@@ -168,7 +160,6 @@ public class ProductService {
 	 * @param id ID of the product that should be checked
 	 * @deprecated Currently not being used since notificationmails are not being send.
 	 */
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void checkStockForMail(int id) {
 		Product product = this.get(id);
 		if (product.getCurrentStock() <= product.getStockMinimum()) {

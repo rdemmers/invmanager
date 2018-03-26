@@ -39,7 +39,6 @@ class InventoryMailService {
 	 * @param user User responsable for sending the issue
 	 */
 	@Async
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void createIssueEmail(String emailMessage, User user) {
 
 		String body = emailMessage;
@@ -62,7 +61,6 @@ class InventoryMailService {
 	 * @param product Product that should be included in the e-mail
 	 */
 	@Async
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void createNotificationMail(Product product) {
 		Supplier supplier = product.getSupplier();
 
@@ -98,7 +96,6 @@ class InventoryMailService {
 	 * @param helper Mimemessage target for the attachment
 	 */
 	@Async
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	private void appendAttachment(String attachment, MimeMessageHelper helper) {
 		if (attachment != null) {
 			FileSystemResource file = new FileSystemResource(context.getRealPath("/WEB-INF/attachments/") + "/" + attachment);
@@ -120,7 +117,6 @@ class InventoryMailService {
 	 * @param attachment String reference to the attachment
 	 */
 	@Async
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	private void sendMail(String target, String subject, String body, String attachment) {
 
 		JavaMailSender mailSender = javaBeanConfig.getJavaMailSender(preferenceService);
