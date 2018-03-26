@@ -30,7 +30,6 @@ public class SupplierService{
 	 * 
 	 * @param supplier Supplier to be stored
 	 */
-	@Secured("ROLE_ADMIN")
 	public void create(Supplier supplier) {
 		supplierDao.create(supplier);
 	}
@@ -40,7 +39,6 @@ public class SupplierService{
 	 * @param id The integer id of the Supplier
 	 * @return Returns the Supplier object
 	 */
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public Supplier get(int id) {
 		return supplierDao.get(id);
 		
@@ -50,7 +48,6 @@ public class SupplierService{
 	 * 
 	 * @return A list with all Supplier objects
 	 */
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public List<Supplier> getAll(){
 		return supplierDao.getAll();
 	}
@@ -61,7 +58,6 @@ public class SupplierService{
 	 * @param id The integer id of the Supplier
 	 * @param worth The long value of the total worth
 	 */
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	private void setSupplierWorth(int id, long worth) {
 		Supplier supplier = supplierDao.get(id);
 		supplier.setTotalWorth(worth);
@@ -97,12 +93,10 @@ public class SupplierService{
 	}
 
 	
-	@Secured("ROLE_ADMIN")
 	public void update(Supplier supplier) {
 		supplierDao.update(supplier);
 	}
 	
-	@Secured("ROLE_ADMIN")
 	public void delete(Supplier supplier) {
 		
 		supplierDao.delete(supplier.getName());

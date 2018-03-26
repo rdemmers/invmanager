@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import nl.roydemmers.invmanager.objects.Order;
@@ -23,7 +24,7 @@ public class TaskService {
 	
 	// actual cron :  cron="0 18 * * 1-5"
 	@Async
-	//@Scheduled(cron="1 * * * * 1-5")
+	@Scheduled(cron="1 * * * * 1-5")
 	public void generateOrderMails() {
 		
 		// Fetch list of all orders and suppliers
