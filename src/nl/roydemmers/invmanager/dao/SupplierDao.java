@@ -15,7 +15,6 @@ import nl.roydemmers.invmanager.objects.Supplier;
 @Component("supplierDao")
 public class SupplierDao extends AbstractDao {
 	
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@SuppressWarnings("unchecked")
 	public List<Supplier> getAll() {
 
@@ -23,25 +22,22 @@ public class SupplierDao extends AbstractDao {
 
 	}
 
-	@Secured("ROLE_ADMIN")
 	public void update(Supplier supplier) {
 		session().update(supplier);
 	}
 
-	@Secured("ROLE_ADMIN")
+	
 	public void create(Supplier supplier) {
 
 		session().save(supplier);
 
 	}
 
-	@Secured("ROLE_ADMIN")
 	public boolean delete(String name) {
 		MapSqlParameterSource params = new MapSqlParameterSource("name", name);
 		return jdbc.update("delete from suppliers where name=:name", params) == 1;
 	}
 
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public Supplier get(int id) {
 
 		Criteria crit = session().createCriteria(Supplier.class);

@@ -23,7 +23,6 @@ public class UserDao extends AbstractDao {
 		
 	}
 	
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public User getUserEmail(String username) {
 		
 		Criteria crit = session().createCriteria(User.class);
@@ -33,7 +32,6 @@ public class UserDao extends AbstractDao {
 		
 	}
 	
-	@Secured("ROLE_ADMIN")
 	@SuppressWarnings("unchecked")
 	public List<User> getUserList(){
 		return session().createQuery("from User").list();

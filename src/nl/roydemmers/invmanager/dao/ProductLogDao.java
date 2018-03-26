@@ -13,7 +13,6 @@ import nl.roydemmers.invmanager.objects.InventoryLogItem;
 public class ProductLogDao extends AbstractDao{
 
 
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@SuppressWarnings("unchecked")
 	public List<InventoryLogItem> getAll() {
 		
@@ -21,7 +20,6 @@ public class ProductLogDao extends AbstractDao{
 	}
 	
 	
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public InventoryLogItem getLast() {
 		return (InventoryLogItem)session().createQuery("from InventoryLogItem ORDER BY id DESC").setMaxResults(1).uniqueResult();
 		

@@ -15,7 +15,7 @@ import nl.roydemmers.invmanager.objects.Order;
 @Component("orderDao")
 public class OrderDao extends AbstractDao {
 
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
+	
 	@SuppressWarnings("unchecked")
 	public List<Order> getAll() {
 		return session().createQuery("from Order").list();
@@ -26,24 +26,20 @@ public class OrderDao extends AbstractDao {
 		return session().createQuery("from Order o where o.ordered=false").list();
 	}
 
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public void update(Order order) {
 		session().update(order);
 	}
 
-	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	public void create(Order order) {
 		session().save(order);
 
 	}
 
-	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	public boolean delete(int id) {
 		MapSqlParameterSource params = new MapSqlParameterSource("id", id);
 		return jdbc.update("delete from order where id=:id", params) == 1;
 	}
 
-	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	public Order get(int id) {
 		Criteria crit = session().createCriteria(Order.class);
 		crit.add(Restrictions.eq("id", id));

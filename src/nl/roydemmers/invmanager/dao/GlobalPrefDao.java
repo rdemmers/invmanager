@@ -25,13 +25,11 @@ public class GlobalPrefDao extends AbstractDao {
 		
 	}
 	
-	@Secured("ROLE_ADMIN")
 	public void set(GlobalPref globalPref) {
 		session().update(globalPref);
 		
 	}
 	
-	@Secured("ROLE_ADMIN")
 	@SuppressWarnings("unchecked")
 	public Map<String, GlobalPref> getAll(){
 		List<GlobalPref> preferenceList = session().createQuery("from GlobalPref").list();
