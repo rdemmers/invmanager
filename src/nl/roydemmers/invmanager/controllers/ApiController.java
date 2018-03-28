@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,19 +24,22 @@ import nl.roydemmers.invmanager.objects.Supplier;
 @CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/api")
 public class ApiController extends AbstractController {
-
+	
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/items", method = RequestMethod.GET, produces = "application/json")
 	public List<Product> getAllItems() {
 		return productService.getAllProducts();
 	}
 
 	// Return all products with currentStock < stockMinimum. Filters products that already have an open Order.
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/items/low", method = RequestMethod.GET, produces = "application/json")
 	public List<Product> getLowItems() {
 
 		return productService.getLow();
 	}
 
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/items/{id}", method = RequestMethod.GET, produces = "application/json")
 	public Product getSingleItem(@PathVariable("id") int id) {
 
@@ -43,6 +47,7 @@ public class ApiController extends AbstractController {
 	}
 	
 	// Update a product based on id,
+	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/items/{id}", method = RequestMethod.POST, produces = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	public void updateItem(@PathVariable("id") int id, @RequestBody Map<String, Object> data) {
@@ -52,6 +57,7 @@ public class ApiController extends AbstractController {
 	}
 	
 	// product deletion 
+	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/items/{id}", method = RequestMethod.DELETE, produces = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	public void deleteProduct(@PathVariable("id") int id) {
@@ -61,6 +67,7 @@ public class ApiController extends AbstractController {
 
 	// Mutate the currentStock of a product. This is a seperate mapping from .updateItem(), because all users can mutate
 	// while only mod/admin can update
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/items/{id}/mutate", method = RequestMethod.POST, produces = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	public void mutateProduct(@PathVariable("id") int id, @RequestBody Map<String, Object> data) {
@@ -71,6 +78,7 @@ public class ApiController extends AbstractController {
 		productService.update(product);
 	}
 
+	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/items/new", method = RequestMethod.POST, produces = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	public void createItem(@RequestBody Map<String, Object> data) {
@@ -79,12 +87,14 @@ public class ApiController extends AbstractController {
 		productService.create(product);
 	}
 
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/suppliers", method = RequestMethod.GET, produces = "application/json")
 	public List<Supplier> getSuppliers() {
 
 		return supplierService.getAll();
 	}
 	
+	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/suppliers/new", method = RequestMethod.POST, produces = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	public void createSupplier(@RequestBody Map<String, Object> data) {
@@ -92,18 +102,21 @@ public class ApiController extends AbstractController {
 		
 	}
 
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/suppliers/{id}", method = RequestMethod.GET, produces = "application/json")
 	public Supplier getSuppliers(@PathVariable("id") int id) {
 
 		return supplierService.get(id);
 	}
 
+	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/orders", method = RequestMethod.GET, produces = "application/json")
 	public List<Order> getOrders() {
 		
 		return orderService.getAll();
 	}
 	
+	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/orders/{id}", method = RequestMethod.POST, produces = "application/json")
 	public List<Order> setOrderReceived(@PathVariable("id") int id) {
 		Order order = orderService.get(id);
@@ -113,6 +126,7 @@ public class ApiController extends AbstractController {
 		return orderService.getAll();
 	}
 	
+	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/orders/new", method = RequestMethod.POST, produces = "application/json")
 	public List<Order> newOrder(@RequestBody Map<String, Object> data) {
 		
@@ -128,6 +142,7 @@ public class ApiController extends AbstractController {
 	}
 	
 	// Grab authority of the logged in user, used to alter the front-end display.
+	@Secured({"ROLE_USER", "ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/user", method = RequestMethod.GET, produces = "application/json")
 	public Collection<? extends GrantedAuthority> getUser(Authentication authentication) {
 		return authentication.getAuthorities();
