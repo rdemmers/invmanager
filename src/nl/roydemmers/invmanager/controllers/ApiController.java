@@ -131,11 +131,11 @@ public class ApiController extends AbstractController {
 	public List<Order> newOrder(@RequestBody Map<String, Object> data) {
 		
 		int id = Integer.parseInt(data.get("productId").toString());
-		int multiplier = Integer.parseInt(data.get("quantity").toString());
+		int quantity = Integer.parseInt(data.get("quantity").toString());
 		
 		Product product = productService.get(id);
 		
-		Order order = new Order(product, multiplier, false, false);
+		Order order = new Order.Builder(product).quantity(quantity).ordered(false).received(false).build();
 		orderService.create(order);
 		
 		return orderService.getAll();

@@ -21,7 +21,7 @@ public class Order {
 	@JoinColumn(name = "productid")
 	private Product productId;
 	@Column(name = "quantity")
-	private int quantityMultiplier;
+	private int quantity;
 	@Column(name = "ordered")
 	private boolean ordered;
 	@Column(name = "received")
@@ -33,44 +33,29 @@ public class Order {
 
 	}
 
-	public Order(Product productId, int quantityMultiplier, boolean ordered, boolean received) {
+	private Order(Builder builder) {
 		super();
-		this.productId = productId;
-		this.quantityMultiplier = quantityMultiplier;
-		this.ordered = ordered;
-		this.received = received;
+		this.id = builder.id;
+		this.productId = builder.productId;
+		this.quantity = builder.quantity;
+		this.ordered = builder.ordered;
+		this.received = builder.received;
 	}
 
 	public boolean isOrdered() {
 		return ordered;
 	}
 
-	public void setOrdered(boolean ordered) {
-		this.ordered = ordered;
-	}
-
 	public int getId() {
 		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public Product getProductId() {
 		return productId;
 	}
 
-	public void setProductId(Product productId) {
-		this.productId = productId;
-	}
-
 	public int getQuantityMultiplier() {
-		return quantityMultiplier;
-	}
-
-	public void setQuantityMultiplier(int quantityMultiplier) {
-		this.quantityMultiplier = quantityMultiplier;
+		return quantity;
 	}
 
 	public boolean isReceived() {
@@ -87,7 +72,45 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", productId=" + productId + ", quantityMultiplier=" + quantityMultiplier + ", ordered=" + ordered + ", received=" + received + ", date=" + date + "]";
+		return "Order [id=" + id + ", productId=" + productId + ", quantity=" + quantity + ", ordered=" + ordered + ", received=" + received + ", date=" + date + "]";
+	}
+
+	public static class Builder {
+		private final Product productId;
+
+		private int id;
+		private int quantity;
+		private boolean ordered;
+		private boolean received;
+
+		public Builder(Product product) {
+			this.productId = product;
+		}
+
+		public Builder id(int id) {
+			this.id = id;
+			return this;
+		}
+
+		public Builder quantity(int quantity) {
+			this.quantity = quantity;
+			return this;
+		}
+
+		public Builder ordered(boolean ordered) {
+			this.ordered = ordered;
+			return this;
+		}
+
+		public Builder received(boolean received) {
+			this.received = received;
+			return this;
+		}
+
+		public Order build() {
+			return new Order(this);
+		}
+
 	}
 
 }
