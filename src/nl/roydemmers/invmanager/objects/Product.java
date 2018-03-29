@@ -46,6 +46,8 @@ public class Product {
 	@JsonIgnore
 	@OneToMany(mappedBy = "productId", fetch = FetchType.LAZY)
 	private List<Order> orders;
+	@Column(name="active")
+	private boolean active;
 
 	public Product() {
 	}
@@ -64,6 +66,7 @@ public class Product {
 		this.attachment = builder.attachment;
 		this.supplierId = builder.supplierId;
 		this.orders = builder.orders;
+		this.active = builder.active;
 	}
 
 	public int getId() {
@@ -162,13 +165,19 @@ public class Product {
 		this.orders = orders;
 	}
 
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+
+
 	public static class Builder {
 		private final String barcode;
 		private final String name;
 		private final Supplier supplierId;
-		
+
 		private int id;
-				
+
 		private String description;
 		private int deliveryTime = 0;
 		private long price = 0;
@@ -177,58 +186,60 @@ public class Product {
 		private int stockMinimum = 0;
 		private String attachment = "";
 		private List<Order> orders;
-		
+		private boolean active;
+
 		public Builder(String barcode, String name, Supplier supplier) {
 			this.barcode = barcode;
 			this.name = name;
 			this.supplierId = supplier;
+			this.active = true;
 		}
-		
+
 		public Builder id(int id) {
 			this.id = id;
 			return this;
 		}
-		
+
 		public Builder description(String description) {
 			this.description = description;
 			return this;
 		}
-		
+
 		public Builder deliveryTime(int deliveryTime) {
 			this.deliveryTime = deliveryTime;
 			return this;
 		}
-		
+
 		public Builder price(long price) {
 			this.price = price;
 			return this;
 		}
-		
+
 		public Builder orderMetric(String orderMetric) {
 			this.orderMetric = orderMetric;
 			return this;
 		}
-		
+
 		public Builder currentStock(int currentStock) {
 			this.currentStock = currentStock;
 			return this;
 		}
-		
+
 		public Builder stockMinimum(int stockMinimum) {
 			this.stockMinimum = stockMinimum;
 			return this;
 		}
-		
+
 		public Builder attachment(String attachment) {
 			this.attachment = attachment;
 			return this;
 		}
+
 		public Builder orders(List<Order> orders) {
 			this.orders = orders;
 			return this;
 		}
-		
-		
+
 		public Product build() {
 			return new Product(this);
 		}

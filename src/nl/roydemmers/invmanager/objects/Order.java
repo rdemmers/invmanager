@@ -45,6 +45,11 @@ public class Order {
 	public boolean isOrdered() {
 		return ordered;
 	}
+	
+	public void setOrdered(boolean ordered) {
+		this.ordered = ordered;
+		
+	}
 
 	public int getId() {
 		return id;
@@ -112,5 +117,7 @@ public class Order {
 		}
 
 	}
+
+	
 
 }

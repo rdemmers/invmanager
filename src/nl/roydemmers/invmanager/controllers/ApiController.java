@@ -56,13 +56,14 @@ public class ApiController extends AbstractController {
 		productService.update(product);
 	}
 	
-	// product deletion 
+	// product deletion. Sets product as inactive, so it doesn't show in any lists. Product will still exist in the database for history/log reasons
 	@Secured({"ROLE_ADMIN", "ROLE_MOD"})
 	@RequestMapping(value = "/items/{id}", method = RequestMethod.DELETE, produces = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	public void deleteProduct(@PathVariable("id") int id) {
-
-		productService.delete(id);
+		Product product  = productService.get(id);
+		product.setActive(false);
+		productService.update(product);
 	}
 
 	// Mutate the currentStock of a product. This is a seperate mapping from .updateItem(), because all users can mutate

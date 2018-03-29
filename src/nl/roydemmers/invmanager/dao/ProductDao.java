@@ -5,7 +5,6 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +17,7 @@ public class ProductDao extends AbstractDao {
 	
 	@SuppressWarnings("unchecked")
 	public List<Product> getAll() {
-		return session().createQuery("from Product").list();
+		return session().createQuery("from Product p where p.active is true").list();
 	}
 
 	
