@@ -39,6 +39,23 @@ public class User {
 	}
 
 
+	
+	
+	public User(
+			@Size(min = 8, max = 20, message = "Username must be between 8 and 15 characters long") @Pattern(regexp = "^\\w{8,}$", message = "Username can only consist of numbers, letters and underscore") String username,
+			@Pattern(regexp = "^\\S+$") String password, @Email String email) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		
+		this.authority = "ROLE_USER";
+		this.enabled = true;
+	}
+
+
+
+
 	public String getUsername() {
 		return username;
 	}

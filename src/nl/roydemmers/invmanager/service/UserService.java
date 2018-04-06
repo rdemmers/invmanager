@@ -1,6 +1,7 @@
 package nl.roydemmers.invmanager.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -34,6 +35,15 @@ public class UserService {
 	public List<User> getAllUsers() {
 		return userDao.getUserList();
 		
+		
+	}
+	
+	public User mapJsonToObject(Map<String,Object> data) {
+		String username = data.get("username").toString();
+		String password = data.get("password").toString();
+		String email = data.get("email").toString();
+		
+		return new User(username, password, email);
 		
 	}
 }

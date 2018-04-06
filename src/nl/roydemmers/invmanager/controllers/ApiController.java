@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import nl.roydemmers.invmanager.objects.Order;
 import nl.roydemmers.invmanager.objects.Product;
 import nl.roydemmers.invmanager.objects.Supplier;
+import nl.roydemmers.invmanager.objects.User;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
@@ -147,6 +148,18 @@ public class ApiController extends AbstractController {
 	@RequestMapping(value = "/user", method = RequestMethod.GET, produces = "application/json")
 	public Collection<? extends GrantedAuthority> getUser(Authentication authentication) {
 		return authentication.getAuthorities();
+	}
+	
+	// Grab authority of the logged in user, used to alter the front-end display.
+	@Secured({"ROLE_ADMIN"})
+	@ResponseStatus(value = HttpStatus.OK)
+	@RequestMapping(value = "/user", method = RequestMethod.POST, produces = "application/json")
+	public void newUser(@RequestBody Map<String, Object> data) {
+		
+		
+		User user = userService.mapJsonToObject(data);
+		
+		userService.create(user);
 	}
 
 }
